@@ -1,16 +1,11 @@
-# This is a sample Python script.
+import tkinter as tk
+import random
+from PIL import Image, ImageTK
+from tkinter import messagebox
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+root = tk.Tk()
+#I shall put all the thingy things inside this
+label = tk.Label(root,text="Stella Verba")
+label.pack()
 
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi Jole, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('I wanna go home')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+root.mainloop()
