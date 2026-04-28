@@ -1,16 +1,6 @@
-import random
-from tkinter import messagebox
-#from PIL import Image, ImageTk
 import tkinter as tk
-
-
-
-
-
-
-top = tkinter.Tk()
-
-
-
-
-top.mainloop()
+root = tk.Tk()
+root.title("StellaVerba")
+root.geometry("1200x800")
+root.resizable(False,False)
+root.mainloop()
