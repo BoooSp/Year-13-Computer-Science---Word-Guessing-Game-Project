@@ -6,4 +6,5 @@ root.title("StellaVerba")
 root.geometry("1200x800")
 #Prevent the width or the height being changed by users to prevent any errors from decreasing or increasing size of the screen
 root.resizable(False,False)
+
 root.mainloop()
