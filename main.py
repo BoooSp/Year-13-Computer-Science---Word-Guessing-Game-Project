@@ -4,13 +4,14 @@ from pathlib import Path
 from tkinter import mainloop
 from PIL.ImageTk import PhotoImage
 import pyglet
-from tkinter import Tk, Label
-from tkextrafont import Font
 
-pyglet.options['win32_gdi_font'] = True
-pyglet.font.add_file('Inter.ttf')
-my_font = Font(file="C:/Users/22488/PycharmProjects/Year-13-Computer-Science---Word-Guessing-Game-Project/Fonts/Inter.ttf", family="Inter", size=20)
 
+pyglet.font.add_file('Fonts/Inter-Italic-VariableFont_opsz,wght.ttf')
+pyglet.font.add_file("Fonts/Italianno-Regular.ttf")
+
+
+
+ 
 root = tk.Tk()
 Home=tk.Frame(root)
 Difficulty=tk.Frame(root)
@@ -33,7 +34,7 @@ HomePagebg = PhotoImage(file = "C:/Users/22488/PycharmProjects/Year-13-Computer-
 #Code for my title in the home page
 my_label = tk.Label(Home, image=HomePagebg, bd=0)
 my_label.place(x=0, y=0, relwidth=1, relheight=1)
-my_label = tk.Label(Home, text="Stella Verba", font=("Times New Roman",23))
+my_label = tk.Label(Home, text="Stella Verba", font=("Italliano",33))
 my_label.pack()
 
 #Code for the button in the home page that leads the user to the difficulty selection page
@@ -50,7 +51,7 @@ def Diff_Game():
 #Design for Difficulty Selection Page
 my_label = tk.Label(Difficulty, image=HomePagebg, bd=0)
 my_label.place(x=0, y=0, relwidth=1, relheight=1)
-my_label = tk.Label(Difficulty, text="Difficulty Selection", Font=my_font )
+my_label = tk.Label(Difficulty, text="DIFFICULTY SELECTION", font=("Inter",50) )
 my_label.pack()
 
 button = tk.Button(Difficulty, text="Hard", width = 25,command=Diff_Game)
