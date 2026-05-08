@@ -4,14 +4,26 @@ from pathlib import Path
 from tkinter import mainloop
 from PIL.ImageTk import PhotoImage
 import pyglet
+import ctypes
+import os
 
+
+
+
+
+base_dir = Path(__file__).parent
+img_dir = base_dir / "Images"
+Font_dir = base_dir / "Fonts"
+
+for font_file in os.listdir(Font_dir):
+    if font_file.endswith(".ttf"):
+        ctypes.windll.gdi32.AddFontResourceExW(str(Font_dir / font_file),0x10,0)
 
 pyglet.font.add_file('Fonts/Inter-Italic-VariableFont_opsz,wght.ttf')
 pyglet.font.add_file("Fonts/Italianno-Regular.ttf")
 
 
 
- 
 root = tk.Tk()
 Home=tk.Frame(root)
 Difficulty=tk.Frame(root)
@@ -28,7 +40,7 @@ root.geometry("1200x737")
 #Prevent the width or the height being changed by users to prevent any errors from decreasing or increasing size of the screen
 root.resizable(False,False)
 #background image for my home page and the directory for it, side note - remember to leave bg in top of code so that it would be placed behind other functions
-HomePagebg = PhotoImage(file = "C:/Users/22488/PycharmProjects/Year-13-Computer-Science---Word-Guessing-Game-Project/Images/backstar.png")
+HomePagebg = PhotoImage(file = "Images/backstar.png")
 
 #Home Page
 #Code for my title in the home page
