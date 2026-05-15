@@ -69,7 +69,7 @@ class Verba:
         #releif makes it so that there is no more button brick effect and cursor 2 makes the cursor point when it hovers over the button
         self.lightbutton = tk.Button(self.Home, image=self.sun,command=lambda: self.load_button("lightmode"), bd=0, highlightthickness=0, relief="flat", cursor="hand2",bg=self.data["bgc"],activebackground=self.data["bgc"])
         self.lightbutton.place(relx=0.25, rely=0.05)
-        #code so that there is a image that would be played for a hover effect before the user clicsk on the button to make it more aeshtetic
+        #code so that there is an image that would be played for a hover effect before the user click on the button to make it more aesthetic
         def hover_in(event):self.starb.config(image=self.starhover)
         def hover_out(event):self.starb.config(image=self.star)
         self.starb.bind("<Enter>", hover_in)
