@@ -93,23 +93,32 @@ class Verba:
         self.diff_label.pack()
 
 #button for the hard mode difficulty in the difficluty page
-        self.hardbutton = tk.Button(self.Difficulty, text="Hard", width = 25,command=self.Diff_GameH,bg="#CE2727", font=("Inter",20,"bold"))
-        self.hardbutton.place(relx=0.25,rely=0.2,relwidth=0.1,relheight=0.1)
+        self.hardbutton = tk.Button(self.Difficulty, text="Hard", width = 25,command=self.Diff_GameH,bg="#C7141F", font=("Inter",20,"bold"))
+        self.hardbutton.place(relx=0.2,rely=0.6,relwidth=0.1,relheight=0.1)
+
+
+
+
+
         #Code for the info of each difficulty
-        self.harddesc = tk.Label(self.Difficulty, text="6 letter combination with more objectively harder terms\nHardest difficulty out of the three",font=("Inter",12,"bold"),justify="left",bg=data["descbg"],fg=data["descfg"])
+        self.harddesc = tk.Label(self.Difficulty,font=("Inter",12,"bold"),justify="left",bg=data["descbg"],fg=data["descfg"],text = "6 letter combination with more objectively harder terms\nHardest difficulty out of the three modes")
         self.harddesc.place(relx=0.35, rely=0.6, relwidth=0.4, relheight=0.1)
         self.hardbutton.bind("<Enter>", lambda e: self.hardbutton.config(bg="#FF4C4C"))
-        self.hardbutton.bind("<Leave>", lambda e: self.hardbutton.config(bg="#CE2727"))
+        self.hardbutton.bind("<Leave>", lambda e: self.hardbutton.config(bg="#C7141F"))
 
-        self.mediumbutton = tk.Button(self.Difficulty, text="Medium", width = 25,command=self.Diff_GameH,bg="#CE2727", font=("Inter",20,"bold"))
-        self.mediumbutton.place(relx=0.25,rely=0.4,relwidth=0.1,relheight=0.1)
-        self.mediumbutton.bind("<Enter>", lambda e: self.mediumbutton.config(bg="#FF4C4C"))
-        self.mediumbutton.bind("<Leave>", lambda e: self.mediumbutton.config(bg="#CE2727"))
+        self.mediumbutton = tk.Button(self.Difficulty, text="Medium", width = 25,command=self.Diff_GameH,bg="#C27E01", font=("Inter",20,"bold"),)
+        self.mediumbutton.place(relx=0.2, rely=0.4, relwidth=0.1, relheight=0.1)
+        self.meddesc = tk.Label(self.Difficulty, font=("Inter", 12, "bold"), justify="left", bg=data["descbg"],fg=data["descfg"],text = "5 letter combination with more objectively moderate terms\nMedium difficulty out of the three modes")
+        self.meddesc.place(relx=0.35, rely=0.4, relwidth=0.4, relheight=0.1)
+        self.mediumbutton.bind("<Enter>", lambda e: self.mediumbutton.config(bg="#D98F06"))
+        self.mediumbutton.bind("<Leave>", lambda e: self.mediumbutton.config(bg="#C27E01"))
 
-        self.easybutton = tk.Button(self.Difficulty, text="Easy", width = 25,command=self.Diff_GameH,bg="#CE2727", font=("Inter",20,"bold"))
-        self.easybutton.place(relx=0.25,rely=0.6,relwidth=0.1,relheight=0.1)
-        self.easybutton.bind("<Enter>", lambda e: self.easybutton.config(bg="#FF4C4C"))
-        self.easybutton.bind("<Leave>", lambda e: self.easybutton.config(bg="#CE2727"))
+        self.easybutton = tk.Button(self.Difficulty, text="Hard", width = 25,command=self.Diff_GameH,bg="#558B36", font=("Inter",20,"bold"))
+        self.easydesc = tk.Label(self.Difficulty, font=("Inter", 12, "bold"), justify="left", bg=data["descbg"],fg=data["descfg"],text = "4 letter combination with more objectively simpler terms\nEasiest difficulty out of the three modes")
+        self.easydesc.place(relx=0.35, rely=0.2, relwidth=0.4, relheight=0.1)
+        self.easybutton.place(relx=0.2, rely=0.2, relwidth=0.1, relheight=0.1)
+        self.easybutton.bind("<Enter>", lambda e: self.easybutton.config(bg="#68AF3E"))
+        self.easybutton.bind("<Leave>", lambda e: self.easybutton.config(bg="#558B36"))
 
 
         self.Home.pack(fill="both", expand=True)
