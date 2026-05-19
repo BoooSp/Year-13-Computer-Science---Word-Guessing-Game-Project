@@ -14,7 +14,10 @@ class Verba:
 #the page thingy with self
         self.Home = tk.Frame(root)
         self.Difficulty = tk.Frame(root)
-        self.Game = tk.Frame(root)
+        self.GameH = tk.Frame(root)
+        self.GameM = tk.Frame(root)
+        self.GameE = tk.Frame(root)
+
 
 #the shortcut thingy that makes it so that it doesn't rely on my desktop files
         self.shortcut = Path(__file__).parent
@@ -35,8 +38,8 @@ class Verba:
 
         #this is so that I can like make two codes so that like I am able to do the light and dark mode things
         self.mode="darkmode"
-        self.assets={"darkmode":{"background":"backstar.png","star":"dstar.png","moon":"dmoon.png","sun":"dsun.png","bgc":"#363636","bgt":"white"},
-                     "lightmode":{"background":"lbg.png","star":"lstar.png","moon":"lmoon.png","sun":"lsun.png","bgc":"#DBDBDB","bgt":"#2E2E2E"}}
+        self.assets={"darkmode":{"background":"backstar.png","star":"dstar.png","moon":"dmoon.png","sun":"dsun.png","bgc":"#363636","bgt":"white","descbg":"#5D5D5D","descfg":"#FFFFFF"},
+                     "lightmode":{"background":"lbg.png","star":"lstar.png","moon":"lmoon.png","sun":"lsun.png","bgc":"#DBDBDB","bgt":"#2E2E2E","descbg":"#706F6F","descfg":"#FFFFFF"}}
 
         # background image for my home page and the directory for it, side note - remember to leave bg in top of code so that it would be placed behind other functions
         data = self.assets[self.mode]
@@ -44,7 +47,9 @@ class Verba:
         self.star = PhotoImage(file=str(self.img / data["star"]))
         self.sun = PhotoImage(file=str(self.img / data["sun"]))
         self.moon = PhotoImage(file=str(self.img / data["moon"]))
-        self.starhover = PhotoImage(file=str(self.img/"dstar.png"))
+        #code that allows initially for my code to have the hover function as the function didnt work when i havent switched the mode
+        if self.mode =="darkmode":
+             self.starhover = PhotoImage(file=str(self.img/"hstar.png"))
 
         #this makes it so that I am able to like link all the font thingy and make it work in windows/the cheatsheet for easy acess
         if os.name == "nt":
@@ -90,6 +95,9 @@ class Verba:
 #button for the hard mode difficulty in the difficluty page
         self.hardbutton = tk.Button(self.Difficulty, text="Hard", width = 25,command=self.Diff_GameH,bg="#CE2727", font=("Inter",20,"bold"))
         self.hardbutton.place(relx=0.25,rely=0.2,relwidth=0.1,relheight=0.1)
+        #Code for the info of each difficulty
+        self.harddesc = tk.Label(self.Difficulty, text="6 letter combination with more objectively harder terms\nHardest difficulty out of the three",font=("Inter",12,"bold"),justify="left",bg=data["descbg"],fg=data["descfg"])
+        self.harddesc.place(relx=0.35, rely=0.6, relwidth=0.4, relheight=0.1)
         self.hardbutton.bind("<Enter>", lambda e: self.hardbutton.config(bg="#FF4C4C"))
         self.hardbutton.bind("<Leave>", lambda e: self.hardbutton.config(bg="#CE2727"))
 
