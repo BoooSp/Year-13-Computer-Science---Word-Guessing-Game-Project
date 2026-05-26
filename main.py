@@ -7,7 +7,7 @@ import pyglet
 import ctypes
 import os
 import random
-
+import json
 
 class Verba:
     def __init__(self, root):
@@ -39,7 +39,7 @@ class Verba:
 
         #this is so that I can like make two codes so that like I am able to do the light and dark mode things
         self.mode="darkmode"
-        self.assets={"darkmode":{"background":"backstar.png","star":"dstar.png","moon":"dmoon.png","sun":"dsun.png","bgc":"#363636","bgt":"white","descbg":"#5D5D5D","descfg":"#FFFFFF"},
+        self.assets={"darkmode":{"background":"dbg.png","star":"dstar.png","moon":"dmoon.png","sun":"dsun.png","bgc":"#363636","bgt":"white","descbg":"#5D5D5D","descfg":"#FFFFFF"},
                      "lightmode":{"background":"lbg.png","star":"lstar.png","moon":"lmoon.png","sun":"lsun.png","bgc":"#DBDBDB","bgt":"#2E2E2E","descbg":"#706F6F","descfg":"#FFFFFF"}}
 
         # background image for my home page and the directory for it, side note - remember to leave bg in top of code so that it would be placed behind other functions
@@ -52,13 +52,6 @@ class Verba:
         if self.mode =="darkmode":
              self.starhover = PhotoImage(file=str(self.img/"hstar.png"))
         self.starhover = PhotoImage(file=str(self.img / "hstar.png"))
-
-        #this makes it so that I am able to like link all the font thingy and make it work in windows/the cheatsheet for easy acess
-        if os.name == "nt":
-                for font_file in os.listdir(self.font):
-                    if font_file.endswith(".ttf"):
-                        ctypes.windll.gdi32.AddFontResourceExW(str(self.font / font_file),0x10,0)
-
 
         #Code for my title in the home page
         self.my_label = tk.Label(self.Home, image=self.Homebg, bd=0,bg=data["bgc"],fg=data["bgt"]) #remember what the code purpose was (maybe text idk)
@@ -116,6 +109,7 @@ class Verba:
         self.easybutton.place(relx=0.2, rely=0.2, relwidth=0.1, relheight=0.1)
         self.easybutton.bind("<Enter>", lambda e: self.easybutton.config(bg="#68AF3E"))
         self.easybutton.bind("<Leave>", lambda e: self.easybutton.config(bg="#558B36"))
+
 
         self.Home.pack(fill="both", expand=True)
 
