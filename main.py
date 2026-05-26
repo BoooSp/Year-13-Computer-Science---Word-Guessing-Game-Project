@@ -6,6 +6,7 @@ from PIL.ImageTk import PhotoImage
 import pyglet
 import ctypes
 import os
+import random
 
 
 class Verba:
@@ -43,13 +44,14 @@ class Verba:
 
         # background image for my home page and the directory for it, side note - remember to leave bg in top of code so that it would be placed behind other functions
         data = self.assets[self.mode]
-        self.HomePagebg = PhotoImage(file=str(self.img / data["background"]))
+        self.Homebg = PhotoImage(file=str(self.img / data["background"]))
         self.star = PhotoImage(file=str(self.img / data["star"]))
         self.sun = PhotoImage(file=str(self.img / data["sun"]))
         self.moon = PhotoImage(file=str(self.img / data["moon"]))
         #code that allows initially for my code to have the hover function as the function didnt work when i havent switched the mode
         if self.mode =="darkmode":
              self.starhover = PhotoImage(file=str(self.img/"hstar.png"))
+        self.starhover = PhotoImage(file=str(self.img / "hstar.png"))
 
         #this makes it so that I am able to like link all the font thingy and make it work in windows/the cheatsheet for easy acess
         if os.name == "nt":
@@ -59,7 +61,7 @@ class Verba:
 
 
         #Code for my title in the home page
-        self.my_label = tk.Label(self.Home, image=self.HomePagebg, bd=0,bg=data["bgc"],fg=data["bgt"]) #remember what the code purpose was (maybe text idk)
+        self.my_label = tk.Label(self.Home, image=self.Homebg, bd=0,bg=data["bgc"],fg=data["bgt"]) #remember what the code purpose was (maybe text idk)
         self.my_label.place(x=0, y=0, relwidth=1, relheight=1)
         # The code for the "StellaVerba text in homgpage
         self.home_label = tk.Label(self.Home, text="Stella Verba", font=("Rubik Bubbles",33),bg=data["bgc"],fg=data["bgt"] )
@@ -87,7 +89,7 @@ class Verba:
         self.darkbutton.place(relx=0.70, rely=0.05)
 
         #Design for Difficulty Selection Page
-        self.diff_bg = tk.Label(self.Difficulty, image=self.HomePagebg, bd=0)
+        self.diff_bg = tk.Label(self.Difficulty, image=self.Homebg, bd=0)
         self.diff_bg.place(x=0, y=0, relwidth=1, relheight=1)
         self.diff_label = tk.Label(self.Difficulty, text="DIFFICULTY SELECTION", font=("Rubik Bubbles",50),bg=data["bgc"],fg=data["bgt"]  )
         self.diff_label.pack()
@@ -95,15 +97,10 @@ class Verba:
 #button for the hard mode difficulty in the difficluty page
         self.hardbutton = tk.Button(self.Difficulty, text="Hard", width = 25,command=self.Diff_GameH,bg="#C7141F", font=("Inter",20,"bold"))
         self.hardbutton.place(relx=0.2,rely=0.6,relwidth=0.1,relheight=0.1)
-
-
-
-
-
         #Code for the info of each difficulty
         self.harddesc = tk.Label(self.Difficulty,font=("Inter",12,"bold"),justify="left",bg=data["descbg"],fg=data["descfg"],text = "6 letter combination with more objectively harder terms\nHardest difficulty out of the three modes")
         self.harddesc.place(relx=0.35, rely=0.6, relwidth=0.4, relheight=0.1)
-        self.hardbutton.bind("<Enter>", lambda e: self.hardbutton.config(bg="#FF4C4C"))
+        self.hardbutton.bind("<Enter>", lambda e: self.hardbutton.config(bg="#D81212    "))
         self.hardbutton.bind("<Leave>", lambda e: self.hardbutton.config(bg="#C7141F"))
 
         self.mediumbutton = tk.Button(self.Difficulty, text="Medium", width = 25,command=self.Diff_GameH,bg="#C27E01", font=("Inter",20,"bold"),)
@@ -120,7 +117,6 @@ class Verba:
         self.easybutton.bind("<Enter>", lambda e: self.easybutton.config(bg="#68AF3E"))
         self.easybutton.bind("<Leave>", lambda e: self.easybutton.config(bg="#558B36"))
 
-
         self.Home.pack(fill="both", expand=True)
 
 #the code that allows to create the actual page or smt
@@ -134,20 +130,20 @@ class Verba:
 
     def Diff_GameH(self):
         self.Difficulty.pack_forget()
-        self.Game.pack(fill="both", expand=True)
+        self.GameH.pack(fill="both", expand=True)
 
     def Diff_GameM(self):
         self.Difficulty.pack_forget()
-        self.Game.pack(fill="both", expand=True)
+        self.GameM.pack(fill="both", expand=True)
 
     def Diff_GameE(self):
         self.Difficulty.pack_forget()
-        self.Game.pack(fill="both", expand=True)
+        self.GameE.pack(fill="both", expand=True)
 
     def load_button(self,mode):
         self.mode=mode
         data=self.assets[mode]
-        self.HomePagebg = PhotoImage(file=str(self.img / data["background"])) #The bg for home and diff
+        self.Homebg = PhotoImage(file=str(self.img / data["background"])) #The bg for home and diff
         self.star = PhotoImage(file=str(self.img / data["star"])) #star img of button
         self.sun = PhotoImage(file=str(self.img / data["sun"])) #sun img of button
         self.moon = PhotoImage(file=str(self.img / data["moon"])) #moon img button
@@ -155,18 +151,15 @@ class Verba:
         #The actual pages
         self.Home.config(bg=data["bgc"])
         self.Difficulty.config(bg=data["bgc"])
-        self.diff_bg.config(image=self.HomePagebg,bg=data["bgc"],fg=data["bgt"] )
+        self.diff_bg.config(image=self.Homebg,bg=data["bgc"],fg=data["bgt"] )
         #all the labels and text
-        self.my_label.config(image=self.HomePagebg, bg=data["bgc"])
+        self.my_label.config(image=self.Homebg, bg=data["bgc"])
         self.home_label.config(bg=data["bgc"], fg=data["bgt"])
         self.diff_label.config(bg=data["bgc"], fg=data["bgt"])
         #The buttons for the home page eg the sun the star and the moon
         self.starb.config(image=self.star,bg=data["bgc"])
         self.lightbutton.config(image=self.sun,bg=data["bgc"],activebackground=data["bgc"])
         self.darkbutton.config(image=self.moon,bg=data["bgc"],activebackground=data["bgc"])
-#The difficulty buttons
-
-
 
 root=tk.Tk()
 app=Verba(root)
