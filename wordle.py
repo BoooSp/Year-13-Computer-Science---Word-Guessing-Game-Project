@@ -1,51 +1,96 @@
 from tkinter import *
 import tkinter.ttk as ttk
-import random, time
+import urllib.request
+import threading
+import random
 
+# list of words for each mode (making it 4/5/6 letter for each mode)
+Wordsforthegame = {"easy":["door"],"medium":["stare"],"hard":["failed"],}
+
+# how many letters and guesses per difficulty
+wordlength_eachdifficulty = {"easy": 4, "medium": 5, "hard": 6}
+guessinglimits = {"easy": 6, "medium": 6, "hard": 6}
+
+#Colours i left here for now
+Green  = "#6aaa64"
+Yellow = "#c9b458"
+Grey   = "#787c7e"
 
 # the class for the keyboard function of my game page
 class Physical_DigitalKeyboard(Canvas):
     def __init__(self,master):
-        Canvas.__init__(self,master,bg="black",highlightthickness=0,width=420,height=170)
+        Canvas.__init__(self,master,bg="black",highlightthickness=0,width=600,height=737)
         self.master = master
-        self.grid(row=3,column=1,sticky=N)
+        self.place(x=0, y=0)
 
         self.Keyboard_letter_boxes = ["ABCDEF","GHIJKL","MNOPQR","STUVWX","YZ"]
-        size = 35
-        height=1.3
-        buffer=size/6
-        self.layoutkeys={}
-
+        size = 60
+        height=1
+        gap=10
         LetterButtonColour = "#545454"
-        UsedLetterButtonColour = "#545454"
+        self.layoutkeys={}
+        self.boxes_coord={}
+        totalboxwidth = 6*size*5*gap
+        leftside=300-totalboxwidth/2
+        rightside=300+totalboxwidth/2
+        startingatyaxis=150
 
-        for i in range(3):
+        for i in range(4):
             boxes = self.Keyboard_letter_boxes[i]
             for char in boxes:
-                x,y=int(self["width"])/2+(size+buffer)*(boxes.find(char)-(len(boxes)-1)/2),height*size/2+i*(height*size+buffer)+buffer
-                self.box_rectangle_shapes(x-size/2, y-height*size/2, x+size/2, y+height*size/2, width=0,fill=LetterButtonColour, tags=("key_"+char, "letter"))
-                self.show_text(x, y, text=char.upper(), font=("Inter", 13, "bold"),tag=("letter", "label_" + char.upper()))
-                self.boxes_cord["key_" + char] = (x - size / 2, y - height * size / 2, x + size / 2,y + height * size / 2)
+               col=boxes.find(char)
+               x = 300 + (size + gap) * (col- (len(boxes) - 1) / 2)
+               y = startingatyaxis + i * (size * height + gap)
+               self.create_rectangle(x -size/2,y-size*height/2,x+size/2,y+size*height/2,width=0,fill=LetterButtonColour, tags=("key_" + char, "letter"))
+               self.create_text(x, y, text=char, font=("Inter", 18, "bold"), fill="white",tags=("letter", "label_" + char))
+               self.boxes_coord["key_" + char]=(x-size/2,y-size*height/2,x+size/2,y+size*height/2)
 
-                LetterButtonSize = (3*size+buffer)/2
-                x,y = (10*size+9*buffer)/2, height*size/2+2*(height*size+buffer)+buffer
+        lastrowofkeyboard = startingatyaxis + 4 * (size * height * gap)
+        yonaxis = 300-(size+gap)/2
+        zonaxis=300+(size+gap)/2
+        deletebuttonleftside  = leftside
+        deletebuttonrightside = yonaxis- size/2 - gap
+        deletebuttonmiddle= (deletebuttonleftside + deletebuttonrightside) / 2
 
-                self.letter_rectangle_create(int(self["width"]) / 2 - x, y - height * size / 2,int(self["width"]) / 2 - x + LetterButtonSize, y + height * size / 2,width=0, fill=LetterButtonColour, tag=("enter", "key_enter"))
-                self.show_text(int(self["width"]) / 2 - x + LetterButtonSize / 2, y, text="ENTER",font=("Inter", 9, "bold"), tag=("enter", "label_enter"))
 
-                self.letter_rectangle_create(int(self["width"]) / 2 + x - LetterButtonSize, y - height * size / 2,int(self["width"]) / 2 + x, y + height * size / 2,width=0, fill=LetterButtonColour, tag=("back", "key_back"))
-                self.show_text(int(self["width"]) / 2 + x - LetterButtonSize / 2, y, text="BACK",font=("Inter", 9, "bold"), tag=("back", "label_back"))
+        enterbuttonleftside  = zonaxis+size/2+gap
+        enterbuttonrightside = rightside
+        enterbuttonmiddleside= (enterbuttonleftside + enterbuttonrightside) / 2
 
-                self.tag_bind("letter","<Button>",self.push_button)
-                self.tag_bind("enter","<Button>",self.master.submit)
-                self.tag_bind("back","<Button>",self.master.back)
 
-                def push_button(self, key=None):
-                    for tag in self.boxes_cord:
-                        if self.boxes_cord[tag][0] <= key.x <= self.boxes_cord[tag][2] and \
-                                self.boxes_cord[tag][1] <= key.y <= self.boxes_cord[tag][3]:
-                            self.master.type_letter(tag[-1])
-                            return
+#The last line of buttons on the keyboard has to be done seperately because they are not same shaped (its huering my head ;-;)
+        self.create_rectangle(deletebuttonleftside, lastrowofkeyboard - size*height/2,deletebuttonrightside, lastrowofkeyboard + size*height/2,width=0, fill=LetterButtonColour, tags=("back", "key_back"))
+        self.create_text(deletebuttonmiddle, lastrowofkeyboard,text="DELETE", font=("Inter", 12, "bold"),fill="white", tags=("delete", "deletebutton"))
+        self.boxes_coord["Delete key"] = (deletebuttonleftside, lastrowofkeyboard - size*height/2,deletebuttonrightside, lastrowofkeyboard + size*height/2)
+        self.create_rectangle(yonaxis - size / 2, lastrowofkeyboard - size * height / 2,yonaxis + size / 2, lastrowofkeyboard + size * height / 2,width=0, fill=LetterButtonColour, tags=("key_Y", "letter"))
+        self.create_text(yonaxis, lastrowofkeyboard,text="Y", font=("Inter", 18, "bold"),fill="white", tags=("letter", "label Y BUtton"))
+        self.boxes_coord["Y key"] = (yonaxis - size / 2, lastrowofkeyboard - size * height / 2, yonaxis + size / 2,lastrowofkeyboard + size * height / 2)
+        self.create_rectangle(zonaxis - size / 2, lastrowofkeyboard - size * height / 2, zonaxis + size / 2,lastrowofkeyboard + size * height / 2, width=0, fill=LetterButtonColour,tags=("key Z", "letter"))
+        self.create_text(zonaxis, lastrowofkeyboard, text="Z", font=("Inter", 18, "bold"), fill="white",tags=("letter", "Z Button"))
+        self.boxes_coord["Z key"] = (zonaxis - size / 2, lastrowofkeyboard - size * height / 2, zonaxis + size / 2,lastrowofkeyboard + size * height / 2)
+        self.create_rectangle(enterbuttonleftside, lastrowofkeyboard - size * height / 2, enterbuttonrightside,lastrowofkeyboard + size * height / 2, width=0, fill=LetterButtonColour,tags=("enter", "enter button"))
+        self.create_text(enterbuttonmiddleside, lastrowofkeyboard, text="ENTER", font=("Inter", 12, "bold"),fill="white", tags=("enter", "enterbutton"))
+        self.boxes_coord["Enter key"] = (enterbuttonleftside, lastrowofkeyboard - size * height / 2,enterbuttonrightside, lastrowofkeyboard + size * height / 2)
+
+        self.tag_bind("letter", "<Button>",self.push_button)
+        self.tag_bind("enter", "<Button>", lambda e:self.master.submit)
+        self.tag_bind("back", "<Button>", lambda e:self.master.back)
+
+        def push_button(self, key=None):
+            for tag in self.boxes_coord:
+                if tag in ("Delete key", "Enter key"):
+                    continue
+                x1, y1, x2, y2 = self.boxes_coord[tag]
+                if x1 <= key.x <= x2 and y1 <= key.y <= y2: self.master.allow_letter_type(tag[-1])
+                return
+
+        int(self["width"]) / 2 - x, y - height * size / 2,int(self["width"]) / 2 - x + LetterButtonSize, y + height * size / 2,width=0, fill=LetterButtonColour, tag=("enter", "key_enter"))
+        self.show_text(int(self["width"]) / 2 - x + LetterButtonSize / 2, y, text="ENTER",font=("Inter", 9, "bold"), tag=("enter", "label_enter"))
+
+        self.letter_rectangle_create(int(self["width"]) / 2 + x - LetterButtonSize, y - height * size / 2,int(self["width"]) / 2 + x, y + height * size / 2,width=0, fill=LetterButtonColour, tag=("back", "key_back"))
+        self.show_text(int(self["width"]) / 2 + x - LetterButtonSize / 2, y, text="BACK",font=("Inter", 9, "bold"), tag=("back", "label_back"))
+
+
 
 class StellaVerbaGamePage:
     def __int__(self,master):
