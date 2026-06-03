@@ -61,13 +61,13 @@ class Physical_DigitalKeyboard(Canvas):
 #The last line of buttons on the keyboard has to be done seperately because they are not same shaped (its huering my head ;-;)
         self.create_rectangle(deletebuttonleftside, lastrowofkeyboard - size*height/2,deletebuttonrightside, lastrowofkeyboard + size*height/2,width=0, fill=LetterButtonColour, tags=("back", "key_back"))
         self.create_text(deletebuttonmiddle, lastrowofkeyboard,text="DELETE", font=("Inter", 12, "bold"),fill="white", tags=("delete", "deletebutton"))
-        self.boxes_coord["Delete key"] = (deletebuttonleftside, lastrowofkeyboard - size*height/2,deletebuttonrightside, lastrowofkeyboard + size*height/2)
+        self.boxes_coord["Delete key"] = (deletebuttonleftside, lastrowofkeyboard -size*height/2,deletebuttonrightside, lastrowofkeyboard + size*height/2)
         self.create_rectangle(yonaxis - size / 2, lastrowofkeyboard - size * height / 2,yonaxis + size / 2, lastrowofkeyboard + size * height / 2,width=0, fill=LetterButtonColour, tags=("key_Y", "letter"))
         self.create_text(yonaxis, lastrowofkeyboard,text="Y", font=("Inter", 18, "bold"),fill="white", tags=("letter", "label Y BUtton"))
         self.boxes_coord["Y key"] = (yonaxis - size / 2, lastrowofkeyboard - size * height / 2, yonaxis + size / 2,lastrowofkeyboard + size * height / 2)
         self.create_rectangle(zonaxis - size / 2, lastrowofkeyboard - size * height / 2, zonaxis + size / 2,lastrowofkeyboard + size * height / 2, width=0, fill=LetterButtonColour,tags=("key Z", "letter"))
         self.create_text(zonaxis, lastrowofkeyboard, text="Z", font=("Inter", 18, "bold"), fill="white",tags=("letter", "Z Button"))
-        self.boxes_coord["Z key"] = (zonaxis - size / 2, lastrowofkeyboard - size * height / 2, zonaxis + size / 2,lastrowofkeyboard + size * height / 2)
+        self.boxes_coord["Z key"] = (zonaxis - size / 2,lastrowofkeyboard - size * height / 2, zonaxis + size / 2,lastrowofkeyboard + size * height / 2)
         self.create_rectangle(enterbuttonleftside, lastrowofkeyboard - size * height / 2, enterbuttonrightside,lastrowofkeyboard + size * height / 2, width=0, fill=LetterButtonColour,tags=("enter", "enter button"))
         self.create_text(enterbuttonmiddleside, lastrowofkeyboard, text="ENTER", font=("Inter", 12, "bold"),fill="white", tags=("enter", "enterbutton"))
         self.boxes_coord["Enter key"] = (enterbuttonleftside, lastrowofkeyboard - size * height / 2,enterbuttonrightside, lastrowofkeyboard + size * height / 2)
@@ -84,19 +84,20 @@ class Physical_DigitalKeyboard(Canvas):
                 if x1 <= key.x <= x2 and y1 <= key.y <= y2: self.master.allow_letter_type(tag[-1])
                 return
 
-        int(self["width"]) / 2 - x, y - height * size / 2,int(self["width"]) / 2 - x + LetterButtonSize, y + height * size / 2,width=0, fill=LetterButtonColour, tag=("enter", "key_enter"))
-        self.show_text(int(self["width"]) / 2 - x + LetterButtonSize / 2, y, text="ENTER",font=("Inter", 9, "bold"), tag=("enter", "label_enter"))
-
-        self.letter_rectangle_create(int(self["width"]) / 2 + x - LetterButtonSize, y - height * size / 2,int(self["width"]) / 2 + x, y + height * size / 2,width=0, fill=LetterButtonColour, tag=("back", "key_back"))
-        self.show_text(int(self["width"]) / 2 + x - LetterButtonSize / 2, y, text="BACK",font=("Inter", 9, "bold"), tag=("back", "label_back"))
 
 
 
 class StellaVerbaGamePage:
-    def __int__(self,master):
+    def __int__(self,master,difficulty,app):
         Frame.__init__(self,master,bg="black")
         self.master=master
-        self.grid()
+        self.app=app
+        self.pack(fill="both", expand=True)
+
+        self.wordlength = wordlength_eachdifficulty[difficulty]
+        self.maxguesses = guessinglimits[difficulty]
+        self.answers = Wordsforthegame[difficulty]
+        self.words = Wordsforthegame[difficulty]
 
         top=60
         self.canvas=Canvas(self,bg="black",width=370,height=415+top,highlightthickness=0)
@@ -122,38 +123,61 @@ class StellaVerbaGamePage:
         self.textField = ""
         self.entered = 0
         self.frozen = False
+        self.checking= False
 
-        for x in range(5):
+
+
+        self.keyboard=Physical_DigitalKeyboard(self)
+        cell=68
+        gap=6
+        padding=40
+        answerletterboxwitdth= self.wordlength*cell+(self.wordlength-1)*gap
+        answerletterboxheight=self.maxguesses*cell+(self.maxguesses-1)*gap
+
+        ansboxsx=600+(600-answerletterboxwitdth)//2
+        ansboxsy=(737-answerletterboxheight)//2
+
+        self.ansboxbg=Canvas(self ,bg="e8e8e8e8", highlightthickness=0,width=answerletterboxwitdth+padding*2, height=answerletterboxheight+padding*2)
+        self.ansboxbg.place(x=ansboxsx-padding,y=ansboxsy-padding)
+        self.canvas=Canvas(self ,bg="white",width=answerletterboxwitdth,height=answerletterboxheight,highlightthickness=0)
+        self.canvas.place(x=ansboxsx,y=ansboxsy)
+
+
+
+
+
+        for x in range(self.wordlength):
             for y in range(6):
-                self.canvas.letter_rectangle_create(x*68+20,y*68,x*68+80,y*68+60+top,outline="black",tag=f"cell{x}{y}")
-                self.canvas.show_text(x * 68 + 50, y * 68 + 30 + top, text="", font=("Inter", 30, "bold"),tag=f"text{x}{y}")
+                xx = x * (cell + gap)
+                yy = y * (cell + gap)
+                self.canvas.create_rectangle(xx,yy,xx+cell,yy+cell,outline="black",width=2,tag=f"cell{x}{y}")
+                self.canvas.show_text(xx+cell//2,yy+cell//2, text="", font=("Inter", 30, "bold"),tag=f"text{x}{y}")
 
-        self.WordChoice=random.choice(self.answers)
+
+        self.WordChoice=random.choice(self.answers).upper()
         self.word=self.WordChoice
-        self.Gray=""
-        self.Green=""
-        self.Yellow=""
-        self.bind_all("<Key-BackSpace>", self.back)
-        self.bind_all("<Key-Return>", self.submit)
-        self.bind_all("<Key>", self.type_letter)
+        self.Gray=Grey
+        self.Green=Green
+        self.Yellow=Yellow
+        self.bind_all("<Key-BackSpace>", self.delete_letter())
+        self.bind_all("<Key-Return>", self.subitanswerchoice())
+        self.bind_all("<Key>", self.allow_letter_type())
 #Function that allows the letter to be deleted from the answering box thing
     def delete_letter(self,event=None):
-        if len(self.textField)==0 and self.entered>=6:
+        if self.frozen or self.checking or len(self.textField)==0:
             return
         self.textField=self.textField[:-1]
-
         self.canvas.itemconfigure(f"text{len(self.textField)}{self.entered}",text="")
 
     def subitanswerchoice(self,event=None):
-        if self.textField.lower() not in self.words:
-            self.invalid_word_show()
+        if self.frozen or self.checking:
             return
-        if len(self.textField) <5 or self.entered>=6:
+        if len(self.textField) <self.wordlength or self.entered>=6:
             return
-        colored=[False for i in range(5)]
-        letterCount = {}
-        for char in self.textField:
-            letterCount[char]=0
+            self.checking = True
+            threading.Thread(target=self.check_then_score, daemon=True).start()
+
+
 
         for i in range(5):
             letter = self.textField[i]
@@ -238,6 +262,11 @@ StellaVerbaGamePage(root)
 
 
 
+#int(self["width"]) / 2 - x, y - height * size / 2,int(self["width"]) / 2 - x + LetterButtonSize, y + height * size / 2,width=0, fill=LetterButtonColour, tag=("enter", "key_enter"))
+#self.show_text(int(self["width"]) / 2 - x + LetterButtonSize / 2, y, text="ENTER",font=("Inter", 9, "bold"), tag=("enter", "label_enter"))
+
+#self.letter_rectangle_create(int(self["width"]) / 2 + x - LetterButtonSize, y - height * size / 2,int(self["width"]) / 2 + x, y + height * size / 2,width=0, fill=LetterButtonColour, tag=("back", "key_back"))
+#self.show_text(int(self["width"]) / 2 + x - LetterButtonSize / 2, y, text="BACK",font=("Inter", 9, "bold"), tag=("back", "label_back"))
 
 
 
