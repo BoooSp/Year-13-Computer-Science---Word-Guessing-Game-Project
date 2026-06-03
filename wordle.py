@@ -5,7 +5,7 @@ import threading
 import random
 
 # list of words for each mode (making it 4/5/6 letter for each mode)
-Wordsforthegame = {"easy":["door"],"medium":["stare"],"hard":["failed"],}
+Wordsforthegame = {"easy":["more"],"medium":["stare"],"hard":["failed"],}
 
 # how many letters and guesses per difficulty
 wordlength_eachdifficulty = {"easy": 4, "medium": 5, "hard": 6}
