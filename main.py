@@ -122,6 +122,7 @@ class Verba:
         self.Home.pack_forget()
         self.Difficulty.pack(fill="both", expand=True)
 
+#change this so that it connnects to the code of the wordle page FINALLY
     def Diff_GameH(self):
         self.Difficulty.pack_forget()
         self.GameH.pack(fill="both", expand=True)
@@ -133,6 +134,9 @@ class Verba:
     def Diff_GameE(self):
         self.Difficulty.pack_forget()
         self.GameE.pack(fill="both", expand=True)
+
+
+#Things to do - connec the wordle page, add single line box that shows answers,
 
     def load_button(self,mode):
         self.mode=mode

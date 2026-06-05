@@ -16,6 +16,14 @@ Green  = "#6aaa64"
 Yellow = "#c9b458"
 Grey   = "#787c7e"
 
+def checkifrealword(word):
+    url = f"https://api.dictionaryapi.dev/api/v2/entries/en/{word.lower()}"
+    try:
+        req = urllib.request.Request(url,headers={"User-Agent": "StellaVerba"})
+        urllib.request.urlopen(req, timeout=4)
+        return True
+    except:
+        return False
 # the class for the keyboard function of my game page
 class Physical_DigitalKeyboard(Canvas):
     def __init__(self,master):
@@ -30,7 +38,7 @@ class Physical_DigitalKeyboard(Canvas):
         LetterButtonColour = "#545454"
         self.layoutkeys={}
         self.boxes_coord={}
-        totalboxwidth = 6*size*5*gap
+        totalboxwidth = 6*size*5+gap
         leftside=300-totalboxwidth/2
         rightside=300+totalboxwidth/2
         startingatyaxis=150
@@ -45,7 +53,7 @@ class Physical_DigitalKeyboard(Canvas):
                self.create_text(x, y, text=char, font=("Inter", 18, "bold"), fill="white",tags=("letter", "label_" + char))
                self.boxes_coord["key_" + char]=(x-size/2,y-size*height/2,x+size/2,y+size*height/2)
 
-        lastrowofkeyboard = startingatyaxis + 4 * (size * height * gap)
+        lastrowofkeyboard = startingatyaxis + 4 * (size * height + gap)
         yonaxis = 300-(size+gap)/2
         zonaxis=300+(size+gap)/2
         deletebuttonleftside  = leftside
@@ -56,7 +64,6 @@ class Physical_DigitalKeyboard(Canvas):
         enterbuttonleftside  = zonaxis+size/2+gap
         enterbuttonrightside = rightside
         enterbuttonmiddleside= (enterbuttonleftside + enterbuttonrightside) / 2
-
 
 #The last line of buttons on the keyboard has to be done seperately because they are not same shaped (its huering my head ;-;)
         self.create_rectangle(deletebuttonleftside, lastrowofkeyboard - size*height/2,deletebuttonrightside, lastrowofkeyboard + size*height/2,width=0, fill=LetterButtonColour, tags=("back", "key_back"))
@@ -72,24 +79,22 @@ class Physical_DigitalKeyboard(Canvas):
         self.create_text(enterbuttonmiddleside, lastrowofkeyboard, text="ENTER", font=("Inter", 12, "bold"),fill="white", tags=("enter", "enterbutton"))
         self.boxes_coord["Enter key"] = (enterbuttonleftside, lastrowofkeyboard - size * height / 2,enterbuttonrightside, lastrowofkeyboard + size * height / 2)
 
-        self.tag_bind("letter", "<Button>",self.push_button)
-        self.tag_bind("enter", "<Button>", lambda e:self.master.submit)
-        self.tag_bind("back", "<Button>", lambda e:self.master.back)
-
-        def push_button(self, key=None):
-            for tag in self.boxes_coord:
-                if tag in ("Delete key", "Enter key"):
+    def push_button(self, key=None):
+        for tag in self.boxes_coord:
+            if tag in ("Delete key", "Enter key"):
                     continue
-                x1, y1, x2, y2 = self.boxes_coord[tag]
-                if x1 <= key.x <= x2 and y1 <= key.y <= y2: self.master.allow_letter_type(tag[-1])
-                return
+            x1,y1,x2,y2 = self.boxes_coord[tag]
+            if x1<=key.x<=x2 and y1 <=key.y <= y2:
+                self.master.allow_letter_type(tag[-1])
+            return
 
-
-
+        self.tag_bind("letter", "<Button>",self.push_button)
+        self.tag_bind("enter", "<Button>", lambda e:self.master.subitanswerchoice())
+        self.tag_bind("back", "<Button>", lambda e:self.master.deletetheletter())
 
 class StellaVerbaGamePage:
-    def __int__(self,master,difficulty,app):
-        Frame.__init__(self,master,bg="black")
+    def __init__(self,master,difficulty,app):
+        Frame.__init__(self,master,bg="white")
         self.master=master
         self.app=app
         self.pack(fill="both", expand=True)
@@ -99,33 +104,12 @@ class StellaVerbaGamePage:
         self.answers = Wordsforthegame[difficulty]
         self.words = Wordsforthegame[difficulty]
 
-        top=60
-        self.canvas=Canvas(self,bg="black",width=370,height=415+top,highlightthickness=0)
-        self.canvas.grid(row=2,column=1)
-
-        self.canvas.create_text(370/2,top/2-10,text="Wordle",font=("Inter",30,"bold"))
-        self.keyboard = Physical_DigitalKeyboard(self)
-
-        self.spacer1 = Canvas(self,bg="black",width=50,height=10,highlightthickness=0)
-        self.spacer2 = Canvas(self,bg="black",width=50,height=10,highlightthickness=0)
-        self.spacer1.grid(row=1,column=0)
-        self.spacer2.grid(row=1,column=2)
-        self.sep=ttk.Separator(self,orient=HORIZONTAL)
-        self.sep.grid(row=0,column=0,columnspan=3,sticky=E+W)
-
-        answers = open("easy.txt")
-        self.answers = answers.read().split()
-        answers.close()
-        words = open("easy.txt")
-        self.words = words.read().split()
-        words.close()
-
         self.textField = ""
         self.entered = 0
         self.frozen = False
         self.checking= False
-
-
+        self.alreadywordused = []
+        self.popup =Label(self,text="",font=("Inter",12,"bold"), bg="#C30010",fg="#E8E8E8")
 
         self.keyboard=Physical_DigitalKeyboard(self)
         cell=68
@@ -133,25 +117,20 @@ class StellaVerbaGamePage:
         padding=40
         answerletterboxwitdth= self.wordlength*cell+(self.wordlength-1)*gap
         answerletterboxheight=self.maxguesses*cell+(self.maxguesses-1)*gap
-
         ansboxsx=600+(600-answerletterboxwitdth)//2
         ansboxsy=(737-answerletterboxheight)//2
-
-        self.ansboxbg=Canvas(self ,bg="e8e8e8e8", highlightthickness=0,width=answerletterboxwitdth+padding*2, height=answerletterboxheight+padding*2)
+        self.ansboxbg=Canvas(self ,bg="e8e8e8e8",highlightthickness=0,width=answerletterboxwitdth+padding*2, height=answerletterboxheight+padding*2)
         self.ansboxbg.place(x=ansboxsx-padding,y=ansboxsy-padding)
         self.canvas=Canvas(self ,bg="white",width=answerletterboxwitdth,height=answerletterboxheight,highlightthickness=0)
         self.canvas.place(x=ansboxsx,y=ansboxsy)
 
-
-
-
-
         for x in range(self.wordlength):
-            for y in range(6):
+            for y in range(self.maxguesses):
                 xx = x * (cell + gap)
                 yy = y * (cell + gap)
                 self.canvas.create_rectangle(xx,yy,xx+cell,yy+cell,outline="black",width=2,tag=f"cell{x}{y}")
-                self.canvas.show_text(xx+cell//2,yy+cell//2, text="", font=("Inter", 30, "bold"),tag=f"text{x}{y}")
+                self.canvas.create_text(xx+cell//2,yy+cell//2, text="", font=("Inter", 30, "bold"),tag=f"text{x}{y}")
+
 
 
         self.WordChoice=random.choice(self.answers).upper()
@@ -159,11 +138,14 @@ class StellaVerbaGamePage:
         self.Gray=Grey
         self.Green=Green
         self.Yellow=Yellow
-        self.bind_all("<Key-BackSpace>", self.delete_letter())
-        self.bind_all("<Key-Return>", self.subitanswerchoice())
-        self.bind_all("<Key>", self.allow_letter_type())
+        self.bind_all("<Key-BackSpace>", self.deletetheletter)
+        self.bind_all("<Key-Return>", self.subitanswerchoice)
+        self.bind_all("<Key>", self.allow_letter_type)
+
+
+
 #Function that allows the letter to be deleted from the answering box thing
-    def delete_letter(self,event=None):
+    def deletetheletter(self,event=None):
         if self.frozen or self.checking or len(self.textField)==0:
             return
         self.textField=self.textField[:-1]
@@ -172,14 +154,104 @@ class StellaVerbaGamePage:
     def subitanswerchoice(self,event=None):
         if self.frozen or self.checking:
             return
-        if len(self.textField) <self.wordlength or self.entered>=6:
+        if len(self.textField) <self.wordlength or self.entered>=self.maxguesses:
             return
             self.checking = True
-            threading.Thread(target=self.check_then_score, daemon=True).start()
+            threading.Thread(target=self.checkingboforethescoring, daemon=True).start()
+
+    def checkingboforethescoring(self):
+        #fix this
+        valid = checkifrealword(self.textField)
+        self.after(0,lambda: self.afterthechecking(valid))
+
+    def afterthechecking(self, valid):
+        self.checking = False
+        if not valid:
+            self.showerrorpopup("Word doesn't exist")
+            return
+        if self.textField in self.alreadywordused:
+            self.showerrorpopup("Word has already been used")
+            return
+        self.alreadywordused.append(self.textField)
+        self.checkingtheguessandscoring()
+
+    def showerrorpopup(self, message):
+        self.popup.config(text=message)
+        self.popup.lift()
+        self.popup.place(relx=0.5,y=20,anchor="n")
+        self.after(4000, self.popup.place_forget)
+
+    def checkingtheguessandscoring(self):
+        guess =self.textField
+        secret= self.word
+        colored = [self.Gray]*self.wordlength
+        letterCount ={}
+        for char in secret:
+            if char in letterCount:
+                letterCount[char]+=1
+            else:
+                letterCount[char]=1
+        for i in range(self.wordlength):
+            if guess[i]== secret[i]:
+                colored[i] =self.Green
+                letterCount[guess[i]]-=1
+        for i in range(self.wordlength):
+            if colored[i] ==self.Green:
+                continue
+            if guess[i] in letterCount and letterCount[guess[i]]>0:
+                colored[i]=self.Yellow
+                letterCount[guess[i]]-=1
+        for i in range(self.wordlength):
+            self.canvas.itemconfigure(f"cell{i}{self.entered}",fill=colored[i],outline=colored[i])
+            self.canvas.itemconfigure(f"text{i}{self.entered}",fill="white")
+            cur = self.keyboard.itemcget("key_"+guess[i],"fill")
+            if cur == self.Green:
+                continue
+            if colored[i] ==self.Green:
+                self.keyboard.itemconfigure("key_"+guess[i],fill=self.Green)
+            elif colored[i]== self.Yellow and cur != self.Green:
+                self.keyboard.itemconfigure("key_"+guess[i],fill=self.Yellow)
+            elif colored[i]== self.Gray and cur =="#545454":
+                self.keyboard.itemconfigure("key_"+guess[i], fill=self.Gray)
+        won = colored.count(self.Green) ==self.wordlength
+        self.entered+= 1
+        self.textField=""
+        if won or self.entered >=self.maxguesses:
+            self.frozen =True
+            self.goingtotheresultpage(won)
+
+    def goingtotheresultpage(self, won):
+        self.unbind_all("<Key-BackSpace>")
+        self.unbind_all("<Key-Return>")
+        self.unbind_all("<Key>")
+        self.app.displayingtheresults(won=won,word=self.word,guesses=self.entered)
+
+
+if __name__ == "__main__":
+    root = Tk()
+    root.title("Wordle")
+    root.geometry("1200x737")
+    root.resizable(False, False)
+
+class trasnitioning:
+    def displayingtheresults(self, won, word, guesses):
+        print(f"won={won}, word={word}, guesses={guesses}")
+
+frame = Frame(root, bg="white")
+frame.pack(fill="both", expand=True)
+StellaVerbaGamePage(frame, "medium", trasnitioning())
+root.mainloop()
 
 
 
-        for i in range(5):
+
+
+
+
+
+        #checking if these have to be changed
+
+        (for i in range(5):
             letter = self.textField[i]
             if letter == self.word[i]:
                 self.canvas.itemconfigure(f"cell{i}{self.entered}", fill=self.Green)
@@ -214,7 +286,7 @@ class StellaVerbaGamePage:
         if isinstance(event,str):
             letter=event
         else:
-            letter=event.char.lower()
+            letter=event.char.upper()
         if not letter.isalpha():
             return
         self.canvas.itemconfigure(f"text{len(self.textField)}{self.entered}", text=letter.upper())
@@ -254,7 +326,7 @@ class StellaVerbaGamePage:
 root=Tk()
 root.configure(bg="white")
 root.title("Wordle")
-StellaVerbaGamePage(root)
+StellaVerbaGamePage(root))
 
 
 
@@ -262,11 +334,15 @@ StellaVerbaGamePage(root)
 
 
 
-#int(self["width"]) / 2 - x, y - height * size / 2,int(self["width"]) / 2 - x + LetterButtonSize, y + height * size / 2,width=0, fill=LetterButtonColour, tag=("enter", "key_enter"))
-#self.show_text(int(self["width"]) / 2 - x + LetterButtonSize / 2, y, text="ENTER",font=("Inter", 9, "bold"), tag=("enter", "label_enter"))
 
-#self.letter_rectangle_create(int(self["width"]) / 2 + x - LetterButtonSize, y - height * size / 2,int(self["width"]) / 2 + x, y + height * size / 2,width=0, fill=LetterButtonColour, tag=("back", "key_back"))
-#self.show_text(int(self["width"]) / 2 + x - LetterButtonSize / 2, y, text="BACK",font=("Inter", 9, "bold"), tag=("back", "label_back"))
+
+
+
+
+
+
+
+
 
 
 
