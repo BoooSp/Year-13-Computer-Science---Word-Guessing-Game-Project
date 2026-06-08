@@ -2,12 +2,17 @@ import tkinter as tk
 from PIL import ImageTk, Image
 from pathlib import Path
 from tkinter import mainloop
+
+from PIL.ImageOps import expand
 from PIL.ImageTk import PhotoImage
 import pyglet
 import ctypes
 import os
 import random
 import json
+
+from wordle import StellaVerbaGamePage
+
 
 class Verba:
     def __init__(self, root):
@@ -88,22 +93,22 @@ class Verba:
         self.diff_label.pack()
 
 #button for the hard mode difficulty in the difficluty page
-        self.hardbutton = tk.Button(self.Difficulty, text="Hard", width = 25,command=self.Diff_GameH,bg="#C7141F", font=("Inter",20,"bold"))
+        self.hardbutton = tk.Button(self.Difficulty, text="Hard", width = 25,command=lambda:self.Diff_Game("hard"),bg="#C7141F", font=("Inter",20,"bold"))
         self.hardbutton.place(relx=0.2,rely=0.6,relwidth=0.1,relheight=0.1)
         #Code for the info of each difficulty
         self.harddesc = tk.Label(self.Difficulty,font=("Inter",12,"bold"),justify="left",bg=data["descbg"],fg=data["descfg"],text = "6 letter combination with more objectively harder terms\nHardest difficulty out of the three modes")
         self.harddesc.place(relx=0.35, rely=0.6, relwidth=0.4, relheight=0.1)
-        self.hardbutton.bind("<Enter>", lambda e: self.hardbutton.config(bg="#D81212    "))
+        self.hardbutton.bind("<Enter>", lambda e: self.hardbutton.config(bg="#D81212"))
         self.hardbutton.bind("<Leave>", lambda e: self.hardbutton.config(bg="#C7141F"))
 
-        self.mediumbutton = tk.Button(self.Difficulty, text="Medium", width = 25,command=self.Diff_GameH,bg="#C27E01", font=("Inter",20,"bold"),)
+        self.mediumbutton = tk.Button(self.Difficulty, text="Medium", width = 25,command=lambda:self.Diff_Game("medium"),bg="#C27E01", font=("Inter",20,"bold"))
         self.mediumbutton.place(relx=0.2, rely=0.4, relwidth=0.1, relheight=0.1)
         self.meddesc = tk.Label(self.Difficulty, font=("Inter", 12, "bold"), justify="left", bg=data["descbg"],fg=data["descfg"],text = "5 letter combination with more objectively moderate terms\nMedium difficulty out of the three modes")
         self.meddesc.place(relx=0.35, rely=0.4, relwidth=0.4, relheight=0.1)
         self.mediumbutton.bind("<Enter>", lambda e: self.mediumbutton.config(bg="#D98F06"))
         self.mediumbutton.bind("<Leave>", lambda e: self.mediumbutton.config(bg="#C27E01"))
 
-        self.easybutton = tk.Button(self.Difficulty, text="Hard", width = 25,command=self.Diff_GameH,bg="#558B36", font=("Inter",20,"bold"))
+        self.easybutton = tk.Button(self.Difficulty, text="Easy", width = 25,command=lambda:self.Diff_Game("easy"),bg="#558B36", font=("Inter",20,"bold"))
         self.easydesc = tk.Label(self.Difficulty, font=("Inter", 12, "bold"), justify="left", bg=data["descbg"],fg=data["descfg"],text = "4 letter combination with more objectively simpler terms\nEasiest difficulty out of the three modes")
         self.easydesc.place(relx=0.35, rely=0.2, relwidth=0.4, relheight=0.1)
         self.easybutton.place(relx=0.2, rely=0.2, relwidth=0.1, relheight=0.1)
@@ -123,17 +128,21 @@ class Verba:
         self.Difficulty.pack(fill="both", expand=True)
 
 #change this so that it connnects to the code of the wordle page FINALLY
-    def Diff_GameH(self):
+    def Diff_Game(self,difficulty):
         self.Difficulty.pack_forget()
-        self.GameH.pack(fill="both", expand=True)
+        if hasattr(self,"gameframeofwordle") and self.gameframeofwordle.winfo_exists():
+            self.gameframeofwordle.destroy()
+        self.gameframeofwordle=tk.Frame(self.root,bg="white")
+        self.gameframeofwordle.pack(fill="both",expand=True)
+        StellaVerbaGamePage(self.gameframeofwordle,difficulty,self)
 
-    def Diff_GameM(self):
-        self.Difficulty.pack_forget()
-        self.GameM.pack(fill="both", expand=True)
+    def displayingtheresults(self,won,word,guesses):
+        if hasattr(self,"gameframeofwordle"):
+            self.gameframeofwordle.destroy()
+        self.Home.pack(fill="both",expand=True)
 
-    def Diff_GameE(self):
-        self.Difficulty.pack_forget()
-        self.GameE.pack(fill="both", expand=True)
+
+
 
 
 #Things to do - connec the wordle page, add single line box that shows answers,

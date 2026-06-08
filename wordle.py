@@ -92,7 +92,7 @@ class Physical_DigitalKeyboard(Canvas):
         self.tag_bind("enter", "<Button>", lambda e:self.master.subitanswerchoice())
         self.tag_bind("back", "<Button>", lambda e:self.master.deletetheletter())
 
-class StellaVerbaGamePage:
+class StellaVerbaGamePage(Frame):
     def __init__(self,master,difficulty,app):
         Frame.__init__(self,master,bg="white")
         self.master=master
@@ -119,7 +119,7 @@ class StellaVerbaGamePage:
         answerletterboxheight=self.maxguesses*cell+(self.maxguesses-1)*gap
         ansboxsx=600+(600-answerletterboxwitdth)//2
         ansboxsy=(737-answerletterboxheight)//2
-        self.ansboxbg=Canvas(self ,bg="e8e8e8e8",highlightthickness=0,width=answerletterboxwitdth+padding*2, height=answerletterboxheight+padding*2)
+        self.ansboxbg=Canvas(self ,bg="#E8E8E8",highlightthickness=0,width=answerletterboxwitdth+padding*2, height=answerletterboxheight+padding*2)
         self.ansboxbg.place(x=ansboxsx-padding,y=ansboxsy-padding)
         self.canvas=Canvas(self ,bg="white",width=answerletterboxwitdth,height=answerletterboxheight,highlightthickness=0)
         self.canvas.place(x=ansboxsx,y=ansboxsy)
@@ -140,7 +140,7 @@ class StellaVerbaGamePage:
         self.Yellow=Yellow
         self.bind_all("<Key-BackSpace>", self.deletetheletter)
         self.bind_all("<Key-Return>", self.subitanswerchoice)
-        self.bind_all("<Key>", self.allow_letter_type)
+        self.bind_all("<Key>", self.master.allow_letter_type)
 
 
 
@@ -227,129 +227,10 @@ class StellaVerbaGamePage:
         self.app.displayingtheresults(won=won,word=self.word,guesses=self.entered)
 
 
-if __name__ == "__main__":
-    root = Tk()
-    root.title("Wordle")
-    root.geometry("1200x737")
-    root.resizable(False, False)
 
 class trasnitioning:
     def displayingtheresults(self, won, word, guesses):
         print(f"won={won}, word={word}, guesses={guesses}")
-
-frame = Frame(root, bg="white")
-frame.pack(fill="both", expand=True)
-StellaVerbaGamePage(frame, "medium", trasnitioning())
-root.mainloop()
-
-
-
-
-
-
-
-
-        #checking if these have to be changed
-
-        (for i in range(5):
-            letter = self.textField[i]
-            if letter == self.word[i]:
-                self.canvas.itemconfigure(f"cell{i}{self.entered}", fill=self.Green)
-                self.keyboard.itemconfigure("key_" + letter, fill=self.Green)
-                letterCount[letter] += 1
-                colored[i] = True
-
-                # color cells and keyboard yellow
-        for i in range(5):
-            letter = self.textField[i]
-            if letter != self.word[i] and letter in self.word and \
-                letterCount[letter] < self.word.count(letter):
-                self.keyboard.itemconfigure("key_"+letter, fill=self.YELLOW)
-                self.canvas.itemconfigure(f"cell{i}{self.entered}", fill=self.YELLOW)
-                letterCount[letter] += 1
-                colored[i] = True
-            elif letterCount[letter] >= self.word.count(letter) and not colored[i]:
-                self.canvas.itemconfigure(f"cell{i}{self.entered}", fill=self.GRAY)
-                self.keyboard.itemconfigure("key_"+letter, fill=self.GRAY)
-
-        if self.word.upper() ==self.textField.upper():
-            self.frozen=True
-            self.result_display()
-
-        elif self.entered==5:
-            self.result_display()
-            self.entered+=1
-            self.textField=""
-    def allow_letter_type(self,event):
-        if len(self.textField)>=5 or self.frozen:
-            return
-        if isinstance(event,str):
-            letter=event
-        else:
-            letter=event.char.upper()
-        if not letter.isalpha():
-            return
-        self.canvas.itemconfigure(f"text{len(self.textField)}{self.entered}", text=letter.upper())
-        self.textField += letter
-
-    def not_available_word_showing(self):
-
-        self.canvas.create_rectangle(185 - 80, 35 - 18, 185 + 80, 35 + 18, fill="#a00", tag="invalid", width=0)
-        self.canvas.create_text(185, 35, text="Invalid word.", font=("Inter", 12), fill="white", tag="invalid")
-        self.after(1500, self.invalid_word_hide)
-
-    def not_available_word_hiding(self):
-        self.canvas.delete("Invalid")
-
-    def win_display(self):
-        if self.entered == 0:
-            tries = "try"
-        else:
-            tries = "tries"
-        x, y = 185, 260
-        self.canvas.create_rectangle(x - 150, y - 50, x + 150, y + 50, fill="#white")
-        self.canvas.create_text(x - 140, y - 20, text="Congratulation! You guessed '" + self.word.upper() + "'\nin " + \
-        str(self.entered + 1) + " " + tries + ".", font=("Inter", 12),anchor=W)
-        self.button = Button(text="New Wordle", relief="flat", font=("Inter", 10, "bold"), command=self.restart_game,bg=self.Green, fg="white")
-        self.canvas.create_window(x, y + 23, window=self.button)
-
-    def lose_display(self):
-        x, y = 185, 260
-        self.canvas.create_rectangle(x - 150, y - 50, x + 150, y + 50, fill="#fff")
-        self.canvas.create_text(x - 140, y - 20,text="Sorry, you ran out of tries. The word was\n'" + self.word.upper() + "'.",font=("Arial", 12), anchor=W)\
-
-        self.button = Button(text="Play Again",relief="flat",font=("Inter",25,"bold"),command=self.restart_game,bg="red",fg="white")
-
-    def play_again_function (self):
-        self.grid_remove()
-        self.__init__(self.master)
-root=Tk()
-root.configure(bg="white")
-root.title("Wordle")
-StellaVerbaGamePage(root))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
