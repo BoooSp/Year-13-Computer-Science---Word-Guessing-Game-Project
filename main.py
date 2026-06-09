@@ -1,16 +1,9 @@
 import tkinter as tk
 from PIL import ImageTk, Image
 from pathlib import Path
-from tkinter import mainloop
-
-from PIL.ImageOps import expand
 from PIL.ImageTk import PhotoImage
 import pyglet
-import ctypes
-import os
 import random
-import json
-
 from wordle import StellaVerbaGamePage
 
 
@@ -20,9 +13,6 @@ class Verba:
 #the page thingy with self
         self.Home = tk.Frame(root)
         self.Difficulty = tk.Frame(root)
-        self.GameH = tk.Frame(root)
-        self.GameM = tk.Frame(root)
-        self.GameE = tk.Frame(root)
 
 
 #the shortcut thingy that makes it so that it doesn't rely on my desktop files
