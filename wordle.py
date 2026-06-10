@@ -10,16 +10,16 @@ from PIL.ImageTk import PhotoImage
 Wordsforthegame = {"easy":["easy"],"medium":["stare"],"hard":["failed"],}
 
 #Add Definitions
-
+Definitions = { "easy": "", "stare": "", "failed": "", }
 
 # how many letters and guesses per difficulty
 wordlength_eachdifficulty = {"easy": 4, "medium": 5, "hard": 6}
 guessinglimits = {"easy": 6, "medium": 6, "hard": 6}
 
 #Colours i left here for now
-Green  = "#"
-Yellow = "#"
-Grey   = "#"
+Green  = "#375B37"
+Yellow = "#AAA228"
+Grey   = "#2B2B2B"
 
 def checkifrealword(word):
     url = f"https://api.dictionaryapi.dev/api/v2/entries/en/{word.lower()}"
@@ -50,11 +50,11 @@ class Physical_DigitalKeyboard(Canvas):
         totalboxwidth = 6*(size+gap)-gap
         leftside=300-totalboxwidth/2
         rightside=300+totalboxwidth/2
-        startingatyaxis=150
+        startingatyaxis=300
+        self.tag_bind("letter", "<Button-1>",self.push_button)
+        self.tag_bind("enter", "<Button>-1", lambda e:self.master.subitanswerchoice())
+        self.tag_bind("back", "<Button>-1", lambda e:self.master.deletetheletter())
         #The extra functions that allow the letters to work and the delete and enter button
-        self.tag_bind("letter", "<Button>",self.push_button)
-        self.tag_bind("enter", "<Button>", lambda e:self.master.subitanswerchoice())
-        self.tag_bind("back", "<Button>", lambda e:self.master.deletetheletter())
 
         for i in range(4):
             boxes = self.Keyboard_letter_boxes[i]
@@ -92,13 +92,15 @@ class Physical_DigitalKeyboard(Canvas):
         self.create_text(enterbuttonmiddleside, lastrowofkeyboard, text="ENTER", font=("Inter", 12, "bold"),fill="white", tags=("enter", "enterbutton"))
         self.boxes_coord["Enter key"] = (enterbuttonleftside, lastrowofkeyboard - size * height / 2,enterbuttonrightside, lastrowofkeyboard + size * height / 2)
 
+
     def push_button(self, event):
         for tag,(x1,y1,x2,y2) in self.boxes_coord.items():
             if tag in ("Delete key", "Enter key"):
                     continue
             if x1 <= event.x <= x2 and y1 <= event.y <= y2:
-                self.allow_letter_type(tag[-1])
-            return
+                self.master.allow_letter_type(tag[-1])
+                return
+
 
 class StellaVerbaGamePage(Frame):
     def __init__(self,master,difficulty,app):
@@ -139,15 +141,18 @@ class StellaVerbaGamePage(Frame):
         #Code for the line function including help button, hintbutton and the line of the final answer box
 
         centreofkeyboardthing = 300
-        functionlinething_y = 330
+        functionlinething_y = 115
         functionlinething_x = centreofkeyboardthing - answerletterboxwitdth // 2
+        #The line that seperates from the keyboard and the single line funciton
+        self.middleline_inwordlepage = Canvas(self, bg="#555555", highlightthickness=0, height=2, width=560)
+        self.middleline_inwordlepage.place(x=20, y=functionlinething_y + cell + 15)
 
-        self.singlelinebox = Canvas(self, bg="white", width=answerletterboxwitdth, height=cell, highlightthickness=0)
+        self.singlelinebox = Canvas(self, bg="#3D3D3D", width=answerletterboxwitdth, height=cell, highlightthickness=0)
         self.singlelinebox.place(x=functionlinething_x, y=functionlinething_y)
         for x in range(self.wordlength):
             xx = x * (cell + gap)
-            self.singlelinebox.create_rectangle(xx, 0, xx + cell, cell, outline="black", width=2, tag=f"hint{x}")
-            self.singlelinebox.create_text(xx + cell // 2, cell // 2, text="", font=("Inter", 30, "bold"),tag=f"givehintletter{x}")
+            self.singlelinebox.create_rectangle(xx, 0, xx + cell, cell, outline="#6E6E6E", width=2, tag=f"hint{x}", fill="#3D3D3D")
+            self.singlelinebox.create_text(xx + cell // 2, cell // 2, text="", font=("Inter", 30, "bold"), fill="white",tag=f"givehintletter{x}")
 
         self.hintbuttonimage = PhotoImage(file=str(self.img / "lightbulb.png"))
         self.hintbutton = Label(self, image=self.hintbuttonimage, bd=0, cursor="hand2")
@@ -159,20 +164,19 @@ class StellaVerbaGamePage(Frame):
 
         self.helpimg = PhotoImage(file=str(self.img / "helpimg.png"))
         self.helppagebox = Label(self, image=self.helpimg, bd=0)
-        self.helppageclose = Label(self, text="✕", font=("Inter", 14, "bold"), cursor="hand2", bg="#363636", fg="white")
-        self.helppageclose.bind("<ButtonRelease-1>", self.helppageclose)
+        self.helppageclose = Label(self, text="✕", font=("Inter", 14, "bold"), cursor="hand2", bg="#C7141F", fg="white")
+        self.helppageclose.bind("<ButtonRelease-1>", self.closehelppage)
 
-        self.ansboxbg=Canvas(self ,bg="#E8E8E8",highlightthickness=0,width=answerletterboxwitdth+padding*2, height=answerletterboxheight+padding*2)
+        self.ansboxbg=Canvas(self ,bg="#2A2A2A",highlightthickness=0,width=answerletterboxwitdth+padding*2, height=answerletterboxheight+padding*2)
         self.ansboxbg.place(x=ansboxsx-padding,y=ansboxsy-padding)
-        self.canvas=Canvas(self ,bg="white",width=answerletterboxwitdth,height=answerletterboxheight,highlightthickness=0)
+        self.canvas=Canvas(self ,bg="#3D3D3D",width=answerletterboxwitdth,height=answerletterboxheight,highlightthickness=0)
         self.canvas.place(x=ansboxsx,y=ansboxsy)
-
         for x in range(self.wordlength):
             for y in range(self.maxguesses):
                 xx = x * (cell + gap)
                 yy = y * (cell + gap)
-                self.canvas.create_rectangle(xx,yy,xx+cell,yy+cell,outline="black",width=2,tag=f"cell{x}{y}")
-                self.canvas.create_text(xx+cell//2,yy+cell//2, text="", font=("Inter", 30, "bold"),tag=f"text{x}{y}")
+                self.canvas.create_rectangle(xx,yy,xx+cell,yy+cell,outline="#6E6E6E",width=2,tag=f"cell{x}{y}",fill="#3D3D3D")
+                self.canvas.create_text(xx+cell//2,yy+cell//2, text="", font=("Inter", 30, "bold"),tag=f"text{x}{y}",fill="white")
 
 
 
@@ -291,7 +295,7 @@ class StellaVerbaGamePage(Frame):
         fill = self.singlelinebox.itemcget(f"hint{i}", "fill")
         if fill == self.Yellow:
             self.singlelinebox.itemconfigure(f"givehintletter{i}", text="")
-            self.singlelinebox.itemconfigure(f"hint{i}", fill="white", outline="black")
+            self.singlelinebox.itemconfigure(f"hint{i}", fill="#3D3D3D", outline="#6E6E6E")
 
     def showhelppage(self):
         self.helppagebox.place(relx=0.5, rely=0.5, anchor="center")
@@ -303,26 +307,62 @@ class StellaVerbaGamePage(Frame):
         self.unbind_all("<Key-BackSpace>")
         self.unbind_all("<Key-Return>")
         self.unbind_all("<Key>")
-        self.app.showresultpage(won=won,word=self.word,guesses=self.entered)
-
+        self.after(1000, lambda:self.app.showresultpage(won=won,word=self.word,guesses=self.entered))
 
     def closehelppage(self, event=None):
         self.helppagebox.place_forget()
         self.helppageclose.place_forget()
 
+class StellaVerbaResultPage(Frame):
+    def __init__(self, master,won,word,guesses,app):
+        Frame.__init__(self, master, bg="white")
+        self.master = master
+        self.app = app
+        self.pack(fill="both", expand=True)
+        self.shortcut = Path(__file__).parent
+        self.img = self.shortcut / "images"
 
-class trasnitioning:
-    def displayingtheresults(self, won, word, guesses):
-        print(f"won={won}, word={word}, guesses={guesses}")
+        self.bgimage = PhotoImage(file=str(self.img / ("dbg2.png" if app.mode == "darkmode" else "lbg2.png")))
+        self.bglabel = Label(self, image=self.bgimage, bd=0)
+        self.bglabel.place(x=0, y=0, relwidth=1, relheight=1)
+        self.resultpagebox = tk.Frame(self, bg="#2E2E2E", bd=0)
+        self.resultpagebox.place(relx=0.5, rely=0.5, anchor="center", relwidth=0.5, relheight=0.78)
+        if won:
+            message = "Congratulations!"
+            colourofendingmessage = "#6AAA64"
+        else:
+            message = "Better Luck Next Time!"
+            colourofendingmessage = "#C7141F"
 
+        self.resulttext = tk.Label(self.resultpagebox, text=message, font=("Rubik Bubbles", 30),bg="#2E2E2E", fg=colourofendingmessage)
+        self.resulttext.pack(pady=(40, 10))
+        self.divider = tk.Frame(self.resultpagebox, bg="#555555", height=2)
+        self.divider.pack(fill="x", padx=30, pady=(0, 15))
 
+        self.thewordistext = tk.Label(self.resultpagebox, text="The word is:", font=("Inter", 16),bg="#2E2E2E", fg="#AAAAAA")
+        self.thewordistext.pack(pady=(0, 5))
 
+        self.revealwordtext = tk.Label(self.resultpagebox, text=word.upper(), font=("Inter", 40, "bold"), bg="#2E2E2E", fg="white")
+        self.revealwordtext.pack(pady=(0, 5))
+        if won:
+            self.amountofguessestext = tk.Label(self.resultpagebox, text=f"You got it in {guesses} guess{'es' if guesses != 1 else ''}!", font=("Inter", 14), bg="#2E2E2E", fg="#AAAAAA")
+            self.amountofguessestext.pack(pady=(0, 20))
+        definition = Definitions.get(word.lower(), "No definition available.")
+        self.definitionbox = tk.Frame(self.resultpagebox, bg="#545454", bd=0)
+        self.definitionbox.pack(padx=30, pady=(0, 30), fill="x")
+        self.fontofthedefiniton = tk.Label(self.definitionbox, text=definition, font=("Inter", 13),bg="#545454", fg="white", wraplength=480, justify="center")
+        self.fontofthedefiniton.pack(padx=20, pady=20)
+        self.delandenterbutton = tk.Frame(self.resultpagebox, bg="#2E2E2E")
+        self.delandenterbutton.pack(pady=(0, 40))
+        self.playagainbutton = tk.Button(self.delandenterbutton, text="Play Again", font=("Inter", 16, "bold"), bg="#CCC751", fg="white", bd=0, relief="flat", cursor="hand2", activebackground="#7BBB75", activeforeground="white", command=self.playagain)
+        self.playagainbutton.pack(side="left", padx=20, ipadx=20, ipady=10)
+        self.exitbutton = tk.Button(self.delandenterbutton, text="Exit", font=("Inter", 16, "bold"),bg="#CCC751", fg="white", bd=0, relief="flat", cursor="hand2",activebackground="#D81212", activeforeground="white",command=self.master.winfo_toplevel().destroy)
+        self.exitbutton.pack(side="left", padx=20, ipadx=20, ipady=10)
 
+    def playagain(self):
+        self.app.displayingtheresults(won=None, word=None, guesses=None)
 
-
-
-a
-
-
-
-
+def displayingtheresults(self, won, word, guesses):
+    if hasattr(self, "gameframeofwordle"):
+        self.gameframeofwordle.destroy()
+    self.Home.pack(fill="both", expand=True)

@@ -4,7 +4,7 @@ from pathlib import Path
 from PIL.ImageTk import PhotoImage
 import pyglet
 import random
-from wordle import StellaVerbaGamePage
+from wordle import StellaVerbaGamePage,StellaVerbaResultPage
 
 
 class Verba:
@@ -127,15 +127,21 @@ class Verba:
         StellaVerbaGamePage(self.gameframeofwordle,difficulty,self)
 
     def displayingtheresults(self,won,word,guesses):
-        if hasattr(self,"gameframeofwordle"):
+        if hasattr(self,"resultframe") and self.resultframe.winfo_exists():
+            self.resultframe.destroy()
+        if hasattr(self,"gameframeofwordle") and self.gameframeofwordle.winfo_exists():
             self.gameframeofwordle.destroy()
         self.Home.pack(fill="both",expand=True)
 
 
+    def showresultpage(self, won, word, guesses):
+        if hasattr(self, "gameframeofwordle") and self.gameframeofwordle.winfo_exists():
+            self.gameframeofwordle.destroy()
+        self.resultframe = tk.Frame(self.root, bg="white")
+        self.resultframe.pack(fill="both", expand=True)
+        StellaVerbaResultPage(self.resultframe, won, word, guesses, self)
 
-
-
-#Things to do - connec the wordle page, add single line box that shows answers,
+    #Things to do - connec the wordle page, add single line box that shows answers,
 
     def load_button(self,mode):
         self.mode=mode
@@ -161,7 +167,6 @@ class Verba:
 root=tk.Tk()
 app=Verba(root)
 root.mainloop()
-
 
 
 
