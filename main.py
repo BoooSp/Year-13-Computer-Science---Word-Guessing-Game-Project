@@ -5,6 +5,8 @@ from PIL.ImageTk import PhotoImage
 import pyglet
 import random
 from wordle import StellaVerbaGamePage,StellaVerbaResultPage
+import os
+import ctypes
 
 
 class Verba:
@@ -37,6 +39,10 @@ class Verba:
         self.assets={"darkmode":{"background":"dbg.png","star":"dstar.png","moon":"dmoon.png","sun":"dsun.png","bgc":"#363636","bgt":"white","descbg":"#5D5D5D","descfg":"#FFFFFF"},
                      "lightmode":{"background":"lbg.png","star":"lstar.png","moon":"lmoon.png","sun":"lsun.png","bgc":"#DBDBDB","bgt":"#2E2E2E","descbg":"#706F6F","descfg":"#FFFFFF"}}
 
+        # this makes it so that I am able to like link all the font thingy and make it work in windows/the cheatsheet for easy acess
+        for font_file in os.listdir(self.font):
+            if font_file.endswith(".ttf"):
+                ctypes.windll.gdi32.AddFontResourceExW(str(self.font / font_file), 0x10, 0)
         # background image for my home page and the directory for it, side note - remember to leave bg in top of code so that it would be placed behind other functions
         data = self.assets[self.mode]
         self.Homebg = PhotoImage(file=str(self.img / data["background"]))
@@ -88,16 +94,17 @@ class Verba:
         #Code for the info of each difficulty
         self.harddesc = tk.Label(self.Difficulty,font=("Inter",12,"bold"),justify="left",bg=data["descbg"],fg=data["descfg"],text = "6 letter combination with more objectively harder terms\nHardest difficulty out of the three modes")
         self.harddesc.place(relx=0.35, rely=0.6, relwidth=0.4, relheight=0.1)
+        #added overlay effect on the button when the user hovers over the button
         self.hardbutton.bind("<Enter>", lambda e: self.hardbutton.config(bg="#D81212"))
         self.hardbutton.bind("<Leave>", lambda e: self.hardbutton.config(bg="#C7141F"))
-
+#code for the medium button
         self.mediumbutton = tk.Button(self.Difficulty, text="Medium", width = 25,command=lambda:self.Diff_Game("medium"),bg="#C27E01", font=("Inter",20,"bold"))
         self.mediumbutton.place(relx=0.2, rely=0.4, relwidth=0.1, relheight=0.1)
         self.meddesc = tk.Label(self.Difficulty, font=("Inter", 12, "bold"), justify="left", bg=data["descbg"],fg=data["descfg"],text = "5 letter combination with more objectively moderate terms\nMedium difficulty out of the three modes")
         self.meddesc.place(relx=0.35, rely=0.4, relwidth=0.4, relheight=0.1)
         self.mediumbutton.bind("<Enter>", lambda e: self.mediumbutton.config(bg="#D98F06"))
         self.mediumbutton.bind("<Leave>", lambda e: self.mediumbutton.config(bg="#C27E01"))
-
+#code for the easy button
         self.easybutton = tk.Button(self.Difficulty, text="Easy", width = 25,command=lambda:self.Diff_Game("easy"),bg="#558B36", font=("Inter",20,"bold"))
         self.easydesc = tk.Label(self.Difficulty, font=("Inter", 12, "bold"), justify="left", bg=data["descbg"],fg=data["descfg"],text = "4 letter combination with more objectively simpler terms\nEasiest difficulty out of the three modes")
         self.easydesc.place(relx=0.35, rely=0.2, relwidth=0.4, relheight=0.1)
@@ -125,7 +132,7 @@ class Verba:
         self.gameframeofwordle=tk.Frame(self.root,bg="white")
         self.gameframeofwordle.pack(fill="both",expand=True)
         StellaVerbaGamePage(self.gameframeofwordle,difficulty,self)
-
+#code that displays the result page itself
     def displayingtheresults(self,won,word,guesses):
         if hasattr(self,"resultframe") and self.resultframe.winfo_exists():
             self.resultframe.destroy()
@@ -133,7 +140,7 @@ class Verba:
             self.gameframeofwordle.destroy()
         self.Home.pack(fill="both",expand=True)
 
-
+#code that displays the pop up of the result page
     def showresultpage(self, won, word, guesses):
         if hasattr(self, "gameframeofwordle") and self.gameframeofwordle.winfo_exists():
             self.gameframeofwordle.destroy()
@@ -142,7 +149,6 @@ class Verba:
         StellaVerbaResultPage(self.resultframe, won, word, guesses, self)
 
     #Things to do - connec the wordle page, add single line box that shows answers,
-
     def load_button(self,mode):
         self.mode=mode
         data=self.assets[mode]

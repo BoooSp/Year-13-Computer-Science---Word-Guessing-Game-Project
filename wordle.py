@@ -5,12 +5,19 @@ import random
 import tkinter as tk
 from pathlib import Path
 from PIL.ImageTk import PhotoImage
+import os
+import ctypes
+import pyglet
+
+
 
 # list of words for each mode (making it 4/5/6 letter for each mode)
-Wordsforthegame = {"easy":["easy"],"medium":["stare"],"hard":["failed"],}
+Wordsforthegame = {"easy":["idea","view"],"medium":["stare"],"hard":["failed"],}
 
 #Add Definitions
-Definitions = { "easy": "", "stare": "", "failed": "", }
+Definitions = { "idea":"A thought or suggestion - That’s a great idea, let’s go to the beach \n understanding or knowledge - I have no idea what you mean \n Purpose or Aim - The idea of the game is to get the highest score \n Belief or Opinion - They have unusual ideas about politics",
+"view":"What can be seen from a certain location - The apartment has a beautiful view of the ocean\nOpinion/Belief - In my view, going left is the best solution \nTo look/Watch - Millions of people watched the broadcast\nTo Consider/Regard - They viewed the delay as a minor inconvenience",
+ "stare": "", "failed": "", }
 
 # how many letters and guesses per difficulty
 wordlength_eachdifficulty = {"easy": 4, "medium": 5, "hard": 6}
@@ -52,10 +59,11 @@ class Physical_DigitalKeyboard(Canvas):
         rightside=300+totalboxwidth/2
         startingatyaxis=300
         self.tag_bind("letter", "<Button-1>",self.push_button)
-        self.tag_bind("enter", "<Button>-1", lambda e:self.master.subitanswerchoice())
-        self.tag_bind("back", "<Button>-1", lambda e:self.master.deletetheletter())
+        self.tag_bind("enter", "<Button-1>", lambda e:self.master.subitanswerchoice())
+        self.tag_bind("back", "<Button-1>", lambda e:self.master.deletetheletter())
         #The extra functions that allow the letters to work and the delete and enter button
 
+#the sizing of the keyboard letters boxes to easily be reffered to
         for i in range(4):
             boxes = self.Keyboard_letter_boxes[i]
             for char in boxes:
@@ -66,6 +74,7 @@ class Physical_DigitalKeyboard(Canvas):
                self.create_text(x, y, text=char, font=("Inter", 18, "bold"), fill="white",tags=("letter", "label_" + char))
                self.boxes_coord["key_" + char]=(x-size/2,y-size*height/2,x+size/2,y+size*height/2)
 
+#last row has different shapes so the sizing has to be different
         lastrowofkeyboard = startingatyaxis + 4 * (size * height + gap)
         yonaxis = 300-(size+gap)/2
         zonaxis=300+(size+gap)/2
@@ -73,7 +82,7 @@ class Physical_DigitalKeyboard(Canvas):
         deletebuttonrightside = yonaxis- size/2 - gap
         deletebuttonmiddle= (deletebuttonleftside + deletebuttonrightside) / 2
 
-
+#the ends of the last line so that it fits inside the box shape of my plan of the keyboard shape
         enterbuttonleftside  = zonaxis+size/2+gap
         enterbuttonrightside = rightside
         enterbuttonmiddleside= (enterbuttonleftside + enterbuttonrightside) / 2
@@ -92,7 +101,7 @@ class Physical_DigitalKeyboard(Canvas):
         self.create_text(enterbuttonmiddleside, lastrowofkeyboard, text="ENTER", font=("Inter", 12, "bold"),fill="white", tags=("enter", "enterbutton"))
         self.boxes_coord["Enter key"] = (enterbuttonleftside, lastrowofkeyboard - size * height / 2,enterbuttonrightside, lastrowofkeyboard + size * height / 2)
 
-
+#allows the buttons to be pushed and pressed aswell as the delete and the enter button
     def push_button(self, event):
         for tag,(x1,y1,x2,y2) in self.boxes_coord.items():
             if tag in ("Delete key", "Enter key"):
@@ -114,6 +123,12 @@ class StellaVerbaGamePage(Frame):
         self.bgimage = PhotoImage(file=str(self.img / ("dbg1.png" if app.mode == "darkmode" else "lbg1.png")))
         self.bg_label = Label(self, image=self.bgimage, bd=0)
         self.bg_label.place(x=0, y=0, relwidth=1, relheight=1)
+        self.font = self.shortcut / "Fonts"
+        # all the font files dir connected with the sef font thingy to make my life easier
+        pyglet.font.add_file(str(self.font / "Inter-Italic-VariableFont_opsz,wght.ttf"))
+        pyglet.font.add_file(str(self.font / "Italianno-Regular.ttf"))
+        pyglet.font.add_file(str(self.font / "RubikBubbles-Regular.ttf"))
+        pyglet.font.add_file(str(self.font / "RubikPuddles-Regular.ttf"))
 
 
         self.wordlength = wordlength_eachdifficulty[difficulty]
@@ -127,6 +142,10 @@ class StellaVerbaGamePage(Frame):
         self.checking= False
         self.alreadywordused = []
         self.popup =Label(self,text="",font=("Inter",12,"bold"), bg="#C30010",fg="#E8E8E8")
+
+        for font_file in os.listdir(self.font):
+            if font_file.endswith(".ttf"):
+                ctypes.windll.gdi32.AddFontResourceExW(str(self.font / font_file), 0x10, 0)
 
 
         self.keyboard=Physical_DigitalKeyboard(self,self.bgimage)
@@ -300,7 +319,7 @@ class StellaVerbaGamePage(Frame):
     def showhelppage(self):
         self.helppagebox.place(relx=0.5, rely=0.5, anchor="center")
         self.helppagebox.lift()
-        self.helppageclose.place(relx=0.72, rely=0.28, anchor="center")
+        self.helppageclose.place(relx=0.715, rely=0.12, anchor="center")
         self.helppageclose.lift()
 
     def goingtotheresultpage(self, won):
@@ -328,10 +347,10 @@ class StellaVerbaResultPage(Frame):
         self.resultpagebox = tk.Frame(self, bg="#2E2E2E", bd=0)
         self.resultpagebox.place(relx=0.5, rely=0.5, anchor="center", relwidth=0.5, relheight=0.78)
         if won:
-            message = "Congratulations!"
+            message = "Congratulations"
             colourofendingmessage = "#6AAA64"
         else:
-            message = "Better Luck Next Time!"
+            message = "Better Luck Next Time"
             colourofendingmessage = "#C7141F"
 
         self.resulttext = tk.Label(self.resultpagebox, text=message, font=("Rubik Bubbles", 30),bg="#2E2E2E", fg=colourofendingmessage)
@@ -350,7 +369,7 @@ class StellaVerbaResultPage(Frame):
         definition = Definitions.get(word.lower(), "No definition available.")
         self.definitionbox = tk.Frame(self.resultpagebox, bg="#545454", bd=0)
         self.definitionbox.pack(padx=30, pady=(0, 30), fill="x")
-        self.fontofthedefiniton = tk.Label(self.definitionbox, text=definition, font=("Inter", 13),bg="#545454", fg="white", wraplength=480, justify="center")
+        self.fontofthedefiniton = tk.Label(self.definitionbox, text=definition, font=("Inter", 10),bg="#545454", fg="white", wraplength=480, justify="center")
         self.fontofthedefiniton.pack(padx=20, pady=20)
         self.delandenterbutton = tk.Frame(self.resultpagebox, bg="#2E2E2E")
         self.delandenterbutton.pack(pady=(0, 40))
