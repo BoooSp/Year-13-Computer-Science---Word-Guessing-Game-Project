@@ -4,7 +4,7 @@ from pathlib import Path
 from PIL.ImageTk import PhotoImage
 import pyglet
 import random
-from wordle import StellaVerbaGamePage,StellaVerbaResultPage
+from game import StellaVerbaGamePage,StellaVerbaResultPage
 import os
 import ctypes
 
@@ -58,7 +58,7 @@ class Verba:
         self.my_label = tk.Label(self.Home, image=self.Homebg, bd=0,bg=data["bgc"],fg=data["bgt"]) #remember what the code purpose was (maybe text idk)
         self.my_label.place(x=0, y=0, relwidth=1, relheight=1)
         # The code for the "StellaVerba text in homgpage
-        self.home_label = tk.Label(self.Home, text="Stella Verba", font=("Rubik Bubbles",33),bg=data["bgc"],fg=data["bgt"] )
+        self.home_label = tk.Label(self.Home, text="Stella Verba", font=("Rubik Bubbles",45),bg=data["bgc"],fg=data["bgt"] )
         self.home_label.pack()
 
 #Code for the star button and the hover effect and stuff
