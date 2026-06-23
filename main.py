@@ -5,8 +5,7 @@ from PIL.ImageTk import PhotoImage
 import pyglet
 import random
 from game import StellaVerbaGamePage,StellaVerbaResultPage
-import os
-import ctypes
+from tkinter import messagebox
 
 
 class Verba:
@@ -21,11 +20,7 @@ class Verba:
         self.shortcut = Path(__file__).parent
         self.img = self.shortcut / "images"
         self.font = self.shortcut / "Fonts"
-#all the font files dir connected with the sef font thingy to make my life easier
-        pyglet.font.add_file(str(self.font / "Inter-Italic-VariableFont_opsz,wght.ttf"))
-        pyglet.font.add_file(str(self.font / "Italianno-Regular.ttf"))
-        pyglet.font.add_file(str(self.font / "RubikBubbles-Regular.ttf"))
-        pyglet.font.add_file(str(self.font / "RubikPuddles-Regular.ttf"))
+
 
         # The title of the game in the bar thingy on top of the normal interface page
         self.root.title("StellaVerba")
@@ -40,9 +35,8 @@ class Verba:
                      "lightmode":{"background":"lbg.png","star":"lstar.png","moon":"lmoon.png","sun":"lsun.png","bgc":"#DBDBDB","bgt":"#2E2E2E","descbg":"#706F6F","descfg":"#FFFFFF"}}
 
         # this makes it so that I am able to like link all the font thingy and make it work in windows/the cheatsheet for easy acess
-        for font_file in os.listdir(self.font):
-            if font_file.endswith(".ttf"):
-                ctypes.windll.gdi32.AddFontResourceExW(str(self.font / font_file), 0x10, 0)
+        for font_file in self.font.glob("*.ttf"):
+            pyglet.font.add_file((str(font_file)))
         # background image for my home page and the directory for it, side note - remember to leave bg in top of code so that it would be placed behind other functions
         data = self.assets[self.mode]
         self.Homebg = PhotoImage(file=str(self.img / data["background"]))
@@ -118,7 +112,7 @@ class Verba:
 #the code that allows to create the actual page or smt
     def Home_Page(self):
         self.Home.pack(fill="both", expand=True)
-        self.Difficulty.pack(fill="both", expand=True)
+
 
     def Home_Diff(self):
         self.Home.pack_forget()
@@ -169,6 +163,16 @@ class Verba:
         self.starb.config(image=self.star,bg=data["bgc"])
         self.lightbutton.config(image=self.sun,bg=data["bgc"],activebackground=data["bgc"])
         self.darkbutton.config(image=self.moon,bg=data["bgc"],activebackground=data["bgc"])
+
+    def Goback(self):
+        self.Difficulty.pack_forget()
+        self.Home.pack(fill="both", expand=True)
+
+    def Gobacktodiff(self):
+        if messagebox.askyesno("Leave Game", "Leave current game and return to difficulty selection?"):
+            if hasattr(self, "gameframeofwordle"):
+                self.gameframeofwordle.destroy()
+            self.Difficulty.pack(fill="both", expand=True)
 
 root=tk.Tk()
 app=Verba(root)
