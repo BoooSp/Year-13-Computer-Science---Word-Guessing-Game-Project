@@ -31,8 +31,8 @@ class Verba:
 
         #this is so that I can like make two codes so that like I am able to do the light and dark mode things
         self.mode="darkmode"
-        self.assets={"darkmode":{"background":"dbg.png","star":"dstar.png","moon":"dmoon.png","sun":"dsun.png","bgc":"#363636","bgt":"white","descbg":"#5D5D5D","descfg":"#FFFFFF"},
-                     "lightmode":{"background":"lbg.png","star":"lstar.png","moon":"lmoon.png","sun":"lsun.png","bgc":"#DBDBDB","bgt":"#2E2E2E","descbg":"#706F6F","descfg":"#FFFFFF"}}
+        self.assets={"darkmode":{"background":"dbg.png","star":"dstar.png","moon":"dmoon.png","sun":"dsun.png","bgc":"#363636","bgt":"white","descbg":"#5D5D5D","descfg":"#FFFFFF","bgt2":"#FFFFAE","bgc2":"#363636"},
+                     "lightmode":{"background":"lbg.png","star":"lstar.png","moon":"lmoon.png","sun":"lsun.png","bgc":"#DBDBDB","bgt":"#2E2E2E","descbg":"#706F6F","descfg":"#FFFFFF","bgt2":"#2E2E2E","bgc2":"#DBDBDB"}}
 
         # this makes it so that I am able to like link all the font thingy and make it work in windows/the cheatsheet for easy acess
         for font_file in self.font.glob("*.ttf"):
@@ -49,13 +49,15 @@ class Verba:
         self.starhover = PhotoImage(file=str(self.img / "hstar.png"))
 
         #Code for my title in the home page
-        self.my_label = tk.Label(self.Home, image=self.Homebg, bd=0,bg=data["bgc"],fg=data["bgt"]) #remember what the code purpose was (maybe text idk)
+        self.my_label = tk.Label(self.Home, image=self.Homebg, bd=0,bg=data["bgc2"],fg=data["bgt"]) #remember what the code purpose was (maybe text idk)
         self.my_label.place(x=0, y=0, relwidth=1, relheight=1)
         # The code for the "StellaVerba text in homgpage
-        self.home_label = tk.Label(self.Home, text="Stella Verba", font=("Rubik Bubbles",45),bg=data["bgc"],fg=data["bgt"] )
-        self.home_label.pack()
+        self.home_label2 = tk.Label(self.Home, text="Stella", font=("Italianno",80),bg=data["bgc"],fg=data["bgt"] )
+        self.home_label2.place(relx=0.34, rely=0.01)
+        self.home_label = tk.Label(self.Home, text="Verba", font=("Rubik Bubbles",45),bg=data["bgc"],fg=data["bgt"] )
+        self.home_label.place(relx=0.5, rely=0.05)
 
-#Code for the star button and the hover effect and stuff
+        #Code for the star button and the hover effect and stuff
 #Code for the button in the home page that leads the user to the difficulty selection page - and also make
 # it so that it doesn't have any brick effect and when you hover over the button it makes a pointer effect to indicate it's a button
         self.starb = tk.Label(self.Home, image=self.star, bd=0, cursor="hand2",bg=data["bgc"], text="PLAY")
@@ -74,7 +76,7 @@ class Verba:
 
 
         self.darkbutton = tk.Button(self.Home, image=self.moon,command=lambda: self.load_button("darkmode"),bd=0, highlightthickness=0, relief="flat", cursor="hand2",bg=data["bgc"],activebackground=data["bgc"])
-        self.darkbutton.place(relx=0.70, rely=0.05)
+        self.darkbutton.place(relx=0.69, rely=0.07)
 
         #Design for Difficulty Selection Page
         self.diff_bg = tk.Label(self.Difficulty, image=self.Homebg, bd=0)
@@ -105,6 +107,8 @@ class Verba:
         self.easybutton.place(relx=0.2, rely=0.2, relwidth=0.1, relheight=0.1)
         self.easybutton.bind("<Enter>", lambda e: self.easybutton.config(bg="#68AF3E"))
         self.easybutton.bind("<Leave>", lambda e: self.easybutton.config(bg="#558B36"))
+        self.diffbackbutton=tk.Button(self.Difficulty,text="<-- Back", font = ("Inter", 14,"bold"), command = self.Goback, bg = "#84817f", fg = "white", bd = 0, cursor = "hand2")
+        self.diffbackbutton.place(x=20, y=20)
 
 
         self.Home.pack(fill="both", expand=True)
@@ -132,9 +136,9 @@ class Verba:
             self.resultframe.destroy()
         if hasattr(self,"gameframeofwordle") and self.gameframeofwordle.winfo_exists():
             self.gameframeofwordle.destroy()
-        self.Home.pack(fill="both",expand=True)
+        self.Difficulty.pack(fill="both",expand=True)
 
-#code that displays the pop up of the result page
+    #code that displays the pop up of the result page
     def showresultpage(self, won, word, guesses):
         if hasattr(self, "gameframeofwordle") and self.gameframeofwordle.winfo_exists():
             self.gameframeofwordle.destroy()
@@ -158,6 +162,7 @@ class Verba:
         #all the labels and text
         self.my_label.config(image=self.Homebg, bg=data["bgc"])
         self.home_label.config(bg=data["bgc"], fg=data["bgt"])
+        self.home_label2.config(bg=data["bgc2"], fg=data["bgt2"])
         self.diff_label.config(bg=data["bgc"], fg=data["bgt"])
         #The buttons for the home page eg the sun the star and the moon
         self.starb.config(image=self.star,bg=data["bgc"])
@@ -169,14 +174,41 @@ class Verba:
         self.Home.pack(fill="both", expand=True)
 
     def Gobacktodiff(self):
-        if messagebox.askyesno("Leave Game", "Leave current game and return to difficulty selection?"):
+        # last row has different shapes so the sizing has to be different
+        size = 60
+        height=1
+        gap=10
+        #sizes of the boxes
+        totalboxwidth = 6*(size+gap)-gap
+        leftside=300-totalboxwidth/2
+        rightside=300+totalboxwidth/2
+        startingatyaxis=300
+        lastrowofkeyboard = startingatyaxis + 4 * (size * height + gap)
+        yonaxis = 300 - (size + gap) / 2
+        zonaxis = 300 + (size + gap) / 2
+        #those were taken from the gamepy
+        Gobackpopup = tk.Toplevel(self.root)
+        Gobackpopup.geometry("400x250")
+        Gobackpopup.resizable(False, False)
+        Gobackpopup.configure(bg="#2E2E2E")
+        Gobackpopup.transient(self.root)
+        Gobackpopup.grab_set()
+        tk.Label(Gobackpopup, text="Leave Game Page?", font=("Rubik Bubbles", 20), bg="#2E2E2E", fg="white").pack(pady=(20, 10))
+        tk.Label(Gobackpopup,
+                 text="Leave current game page and return\nto difficulty selection?\n\n(Leaving will lose your current progress)",
+                 font=("Inter", 11), bg="#2E2E2E", fg="#AAAAAA").pack()
+        def yes():
+            Gobackpopup.destroy()
             if hasattr(self, "gameframeofwordle"):
                 self.gameframeofwordle.destroy()
             self.Difficulty.pack(fill="both", expand=True)
+        def no():
+            Gobackpopup.destroy()
+        buttonframe = tk.Frame(Gobackpopup, bg="#2E2E2E")
+        buttonframe.pack(pady=20)
+        tk.Button(buttonframe, text="Leave", bg="#C7141F", fg="white", font=("Inter", 12, "bold"), bd=0,command=yes).pack(side="left", padx=10)
+        tk.Button(buttonframe, text="Stay", bg="#558B36", fg="white", font=("Inter", 12, "bold"), bd=0,command=no).pack(side="left", padx=10)
 
 root=tk.Tk()
 app=Verba(root)
 root.mainloop()
-
-
-
