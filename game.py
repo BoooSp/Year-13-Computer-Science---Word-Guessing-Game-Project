@@ -67,8 +67,8 @@ Definitions = {
     "inform": "To tell someone something - Please inform us if your plans change\nTo shape understanding - The data informed their decision", }
 
 # how many letters and guesses per difficulty
-wordlength_eachdifficulty = {"easy": 4, "medium": 5, "hard": 6}
-guessinglimits = {"easy": 6, "medium": 6, "hard": 6}
+wordlength_eachdifficulty = {"easy": 4, "medium": 5, "hard": 6} # the word lengths for each of the diffuclty
+guessinglimits = {"easy": 6, "medium": 6, "hard": 6} #the limits I have placed for each mode so the system doesn't allow more letters
 
 #Colours i left here for now
 Green  = "#375B37"
@@ -378,21 +378,23 @@ class StellaVerbaGamePage(Frame):
         if current == self.word[i]:
             self.singlelinebox.itemconfigure(f"givehintletter{i}", text="")
             self.singlelinebox.itemconfigure(f"hint{i}", fill="#3D3D3D", outline="#6E6E6E")
+            #function that allows the help page to open and be shown
     def showhelppage(self):
             self.helppagebox.place(relx=0.5, rely=0.5, anchor="center")
-            self.helppagebox.lift()
+            self.helppagebox.lift() #brings the help page to appear in front
             self.helppageclose.place(relx=0.715, rely=0.12, anchor="center")
-            self.helppageclose.lift()
+            self.helppageclose.lift()#allows the help page close button to appear in frong of the help page
 
+    def closehelppage(self, event=None): #the function that closes both the belp page and the help page button
+        self.helppagebox.place_forget()
+        self.helppageclose.place_forget()
     def goingtotheresultpage(self, won):
         self.unbind_all("<Key-BackSpace>")
         self.unbind_all("<Key-Return>")
         self.unbind_all("<Key>")
         self.after(1000, lambda:self.app.showresultpage(won=won,word=self.word,guesses=self.entered))
 
-    def closehelppage(self, event=None):
-        self.helppagebox.place_forget()
-        self.helppageclose.place_forget()
+
 
 class StellaVerbaResultPage(Frame):
     def __init__(self, master,won,word,guesses,app):
@@ -408,6 +410,7 @@ class StellaVerbaResultPage(Frame):
         self.bglabel.place(x=0, y=0, relwidth=1, relheight=1)
         self.resultpagebox = tk.Frame(self, bg="#2E2E2E", bd=0)
         self.resultpagebox.place(relx=0.5, rely=0.5, anchor="center", relwidth=0.5, relheight=0.78)
+        #depending on wether the user had won one of these two texts appears
         if won:
             message = "Congratulations"
             colourofendingmessage = "#6AAA64"
@@ -417,6 +420,7 @@ class StellaVerbaResultPage(Frame):
 
         self.resulttext = tk.Label(self.resultpagebox, text=message, font=("Rubik Bubbles", 30),bg="#2E2E2E", fg=colourofendingmessage)
         self.resulttext.pack(pady=(40, 10))
+        #the line that seperates the congradulatory line with the definition and the word reveal text
         self.divider = tk.Frame(self.resultpagebox, bg="#555555", height=2)
         self.divider.pack(fill="x", padx=30, pady=(0, 15))
 
@@ -434,11 +438,12 @@ class StellaVerbaResultPage(Frame):
         self.definitionbox.pack(padx=30, pady=(0, 30), fill="x")
         self.fontofthedefiniton = tk.Label(self.definitionbox, text=definition, font=("Inter", 9),bg="#545454", fg="white", wraplength=480, justify="center")
         self.fontofthedefiniton.pack(padx=20, pady=20)
-        self.delandenterbutton = tk.Frame(self.resultpagebox, bg="#2E2E2E")
-        self.delandenterbutton.pack(pady=(0, 40))
-        self.playagainbutton = tk.Button(self.delandenterbutton, text="Play Again", font=("Inter", 16, "bold"), bg="#548a38", fg="white", bd=0, relief="flat", cursor="hand2", activebackground="#5d993d", activeforeground="white", command=self.playagain)
+        self.PlayAgainorExitButton = tk.Frame(self.resultpagebox, bg="#2E2E2E")
+        self.PlayAgainorExitButton.pack(pady=(0, 40))
+        self.playagainbutton = tk.Button(self.PlayAgainorExitButton, text="Play Again", font=("Inter", 16, "bold"), bg="#548a38", fg="white", bd=0, relief="flat", cursor="hand2", activebackground="#5d993d", activeforeground="white", command=self.playagain)
         self.playagainbutton.pack(side="left", padx=20, ipadx=20, ipady=10)
-        self.exitbutton = tk.Button(self.delandenterbutton, text="Exit", font=("Inter", 16, "bold"),bg="#ab1b27", fg="white", bd=0, relief="flat", cursor="hand2",activebackground="#bf1d2a", activeforeground="white",command=self.master.winfo_toplevel().destroy)
+        #the exit button for the result page
+        self.exitbutton = tk.Button(self.PlayAgainorExitButton, text="Exit", font=("Inter", 16, "bold"),bg="#ab1b27", fg="white", bd=0, relief="flat", cursor="hand2",activebackground="#bf1d2a", activeforeground="white",command=self.master.winfo_toplevel().destroy)
         self.exitbutton.pack(side="left", padx=20, ipadx=20, ipady=10)
 
     def playagain(self):

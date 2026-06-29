@@ -48,14 +48,14 @@ class Verba:
              self.starhover = PhotoImage(file=str(self.img/"hstar.png"))
         self.starhover = PhotoImage(file=str(self.img / "hstar.png"))
 
-        #Code for my title in the home page
-        self.my_label = tk.Label(self.Home, image=self.Homebg, bd=0,bg=data["bgc2"],fg=data["bgt"]) #remember what the code purpose was (maybe text idk)
-        self.my_label.place(x=0, y=0, relwidth=1, relheight=1)
+        #the background that holds everything together
+        self.homebackground = tk.Label(self.Home, image=self.Homebg, bd=0,bg=data["bgc2"],fg=data["bgt"])
+        self.homebackground.place(x=0, y=0, relwidth=1, relheight=1)
         # The code for the "StellaVerba text in homgpage
-        self.home_label2 = tk.Label(self.Home, text="Stella", font=("Italianno",80),bg=data["bgc"],fg=data["bgt"] )
-        self.home_label2.place(relx=0.34, rely=0.01)
-        self.home_label = tk.Label(self.Home, text="Verba", font=("Rubik Bubbles",45),bg=data["bgc"],fg=data["bgt"] )
-        self.home_label.place(relx=0.5, rely=0.05)
+        self.hometitlepart1 = tk.Label(self.Home, text="Stella", font=("Italianno",80),bg=data["bgc"],fg=data["bgt"] )
+        self.hometitlepart1.place(relx=0.34, rely=0.01)
+        self.hometitlepart2 = tk.Label(self.Home, text="Verba", font=("Rubik Bubbles",45),bg=data["bgc"],fg=data["bgt"] )
+        self.hometitlepart2.place(relx=0.5, rely=0.05)
 
         #Code for the star button and the hover effect and stuff
 #Code for the button in the home page that leads the user to the difficulty selection page - and also make
@@ -81,8 +81,8 @@ class Verba:
         #Design for Difficulty Selection Page
         self.diff_bg = tk.Label(self.Difficulty, image=self.Homebg, bd=0)
         self.diff_bg.place(x=0, y=0, relwidth=1, relheight=1)
-        self.diff_label = tk.Label(self.Difficulty, text="DIFFICULTY SELECTION", font=("Rubik Bubbles",50),bg=data["bgc"],fg=data["bgt"]  )
-        self.diff_label.pack()
+        self.difficultytitles = tk.Label(self.Difficulty, text="DIFFICULTY SELECTION", font=("Rubik Bubbles",50),bg=data["bgc"],fg=data["bgt"]  )
+        self.difficultytitles.pack()
 
 #button for the hard mode difficulty in the difficluty page
         self.hardbutton = tk.Button(self.Difficulty, text="Hard", width = 25,command=lambda:self.Diff_Game("hard"),bg="#C7141F", font=("Inter",20,"bold"))
@@ -109,14 +109,11 @@ class Verba:
         self.easybutton.bind("<Leave>", lambda e: self.easybutton.config(bg="#558B36"))
         self.diffbackbutton=tk.Button(self.Difficulty,text="<-- Back", font = ("Inter", 14,"bold"), command = self.Goback, bg = "#84817f", fg = "white", bd = 0, cursor = "hand2")
         self.diffbackbutton.place(x=20, y=20)
-
-
         self.Home.pack(fill="both", expand=True)
 
 #the code that allows to create the actual page or smt
     def Home_Page(self):
         self.Home.pack(fill="both", expand=True)
-
 
     def Home_Diff(self):
         self.Home.pack_forget()
@@ -160,10 +157,10 @@ class Verba:
         self.Difficulty.config(bg=data["bgc"])
         self.diff_bg.config(image=self.Homebg,bg=data["bgc"],fg=data["bgt"] )
         #all the labels and text
-        self.my_label.config(image=self.Homebg, bg=data["bgc"])
-        self.home_label.config(bg=data["bgc"], fg=data["bgt"])
-        self.home_label2.config(bg=data["bgc2"], fg=data["bgt2"])
-        self.diff_label.config(bg=data["bgc"], fg=data["bgt"])
+        self.homebackground.config(image=self.Homebg, bg=data["bgc"])
+        self.hometitlepart2.config(bg=data["bgc"], fg=data["bgt"])
+        self.hometitlepart1.config(bg=data["bgc2"], fg=data["bgt2"])
+        self.difficultytitles.config(bg=data["bgc"], fg=data["bgt"])
         #The buttons for the home page eg the sun the star and the moon
         self.starb.config(image=self.star,bg=data["bgc"])
         self.lightbutton.config(image=self.sun,bg=data["bgc"],activebackground=data["bgc"])
@@ -174,19 +171,6 @@ class Verba:
         self.Home.pack(fill="both", expand=True)
 
     def Gobacktodiff(self):
-        # last row has different shapes so the sizing has to be different
-        size = 60
-        height=1
-        gap=10
-        #sizes of the boxes
-        totalboxwidth = 6*(size+gap)-gap
-        leftside=300-totalboxwidth/2
-        rightside=300+totalboxwidth/2
-        startingatyaxis=300
-        lastrowofkeyboard = startingatyaxis + 4 * (size * height + gap)
-        yonaxis = 300 - (size + gap) / 2
-        zonaxis = 300 + (size + gap) / 2
-        #those were taken from the gamepy
         Gobackpopup = tk.Toplevel(self.root)
         Gobackpopup.geometry("400x250")
         Gobackpopup.resizable(False, False)
@@ -194,14 +178,14 @@ class Verba:
         Gobackpopup.transient(self.root)
         Gobackpopup.grab_set()
         tk.Label(Gobackpopup, text="Leave Game Page?", font=("Rubik Bubbles", 20), bg="#2E2E2E", fg="white").pack(pady=(20, 10))
-        tk.Label(Gobackpopup,
-                 text="Leave current game page and return\nto difficulty selection?\n\n(Leaving will lose your current progress)",
-                 font=("Inter", 11), bg="#2E2E2E", fg="#AAAAAA").pack()
+        tk.Label(Gobackpopup,text="Leave current game page and return\nto difficulty selection?\n\n(Leaving will lose your current progress)",font=("Inter", 11), bg="#2E2E2E", fg="#AAAAAA").pack()
+    #if the user had pressed yes it would destroy the game page and then lead back to the difficulty page
         def yes():
             Gobackpopup.destroy()
             if hasattr(self, "gameframeofwordle"):
                 self.gameframeofwordle.destroy()
             self.Difficulty.pack(fill="both", expand=True)
+            #when the user presses no in the message box it would just destroy the frame
         def no():
             Gobackpopup.destroy()
         buttonframe = tk.Frame(Gobackpopup, bg="#2E2E2E")
