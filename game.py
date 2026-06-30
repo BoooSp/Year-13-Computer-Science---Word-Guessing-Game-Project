@@ -8,14 +8,14 @@ from PIL.ImageTk import PhotoImage
 
 import pyglet
 
-
+#emergency change all capital letter of functions and naming conventions
 
 # list of words for each mode (making it 4/5/6 letter for each mode)
 Words_for_the_game = {"easy":["idea","view","fact","goal","role","plan","term","item","base","gain","loss","rule","mean","rank","feel"],
                    "medium":["theme","issue","valid","logic","claim","value","adapt","focus","trend","civil","shift","cause","proof","image","grant"],
                    "hard":["impact","theory","review","debate","select","create","survey","assess","expand","symbol","motive","policy","crisis","effort","enable","factor","status","inform"],}
 
-#the definitons of the words
+#the definitions of the words
 Definitions = {
     "idea": "A thought or suggestion - That's a great idea, let's go to the beach\nUnderstanding or knowledge - I have no idea what you mean\nPurpose or aim - The idea of the game is to get the highest score\nBelief or opinion - They have unusual ideas about politics",
     "view": "What can be seen from a certain location - The apartment has a beautiful view of the ocean\nOpinion or belief - In my view, going left is the best solution\nTo look or watch - Millions of people watched the broadcast\nTo consider or regard - They viewed the delay as a minor inconvenience",
@@ -70,81 +70,81 @@ Definitions = {
 Word_length_for_each_difficulty = {"easy": 4, "medium": 5, "hard": 6} # the word lengths for each of the diffuclty
 Letter_limit_for_each_mode = {"easy": 6, "medium": 6, "hard": 6} #the limits I have placed for each mode so the system doesn't allow more letters
 
-#Colours i left here for now
+#Colours I left here for now
 Green  = "#375B37"
 Yellow = "#AAA228"
 Grey   = "#2B2B2B"
 
-def checkifrealword(word):
+def check_if_real_word(word):
     url = f"https://api.dictionaryapi.dev/api/v2/entries/en/{word.lower()}" #uses the url and the website to confirm the word
     try:
         req = urllib.request.Request(url,headers={"User-Agent": "StellaVerba"})
-        urllib.request.urlopen(req, timeout=4)#sends the thing to confirm the code and it is done in 4 seconds
+        urllib.request.urlopen(req, timeout=4)#sends the thing to confirm the code, and it is done in 4 seconds
         return True
     except:
         return False
 # the class for the keyboard function of my game page
-class Physical_DigitalKeyboard(Canvas):
+class physical_and_digital_keyboard(Canvas):
     def __init__(self,master,Background_Image):
-        Canvas.__init__(self,master,highlightthickness=0,width=600,height=737) #canvas for the keyboard design that i created to palce in my design
+        Canvas.__init__(self,master,highlightthickness=0,width=600,height=737) #canvas for the keyboard design that I created to place in my design
         self.master = master
         self.place(x=0, y=0)
         self.create_image(0, 0, image=Background_Image, anchor="nw")
 
 
 #The letters that will be in the keyboard function
-        self.Keyboard_letter_boxes = ["ABCDEF","GHIJKL","MNOPQR","STUVWX","YZ"]
+        self.Keyboard_letter_boxes = ["ABCDEF","GHIJKL","MNOPQR","STUVWX","YZ"] #the letters that would appear in the keyboard function
         size = 60
         height=1
         gap=10
-        LetterButtonColour = "#545454"
-        self.layoutkeys={}
+        letter_button_colour = "#545454"
+        self.layout_keys={}
         self.boxes_coord={}
         #sizes of the boxes
-        Box_width = 6*(size+gap)-gap
-        leftside=300-Box_width/2
-        rightside=300+Box_width/2
-        At_y_axis=300
+        box_width = 6*(size+gap)-gap
+        left_side=300-box_width/2
+        right_side=300+box_width/2
+        at_y_axis=300
         #only the tag bind being placed above works for the keyboard
         self.tag_bind("letter", "<Button-1>",self.push_button)
-        self.tag_bind("enter", "<Button-1>", lambda e:self.master.Submit_the_answer())
-        self.tag_bind("back", "<Button-1>", lambda e:self.master.Delete_the_letter())
+        self.tag_bind("enter", "<Button-1>", lambda e:self.master.submit_the_answer())
+        self.tag_bind("back", "<Button-1>", lambda e:self.master.delete_the_letter())
         #The extra functions that allow the letters to work and the delete and enter button
 
-#the sizing of the keyboard letters boxes to easily be reffered to
+#the sizing of the keyboard letters boxes to easily be referred to
         for i in range(4):
             boxes = self.Keyboard_letter_boxes[i]
             for col, char in enumerate(boxes):
                x = 300 + (size + gap) * (col- (len(boxes) - 1) / 2)
-               y = At_y_axis + i * (size * height + gap)
-               self.create_rectangle(x -size/2,y-size*height/2,x+size/2,y+size*height/2,width=0,fill=LetterButtonColour, tags=("key_" + char, "letter"))
+               y = at_y_axis + i * (size * height + gap)
+               self.create_rectangle(x -size/2,y-size*height/2,x+size/2,y+size*height/2,width=0,fill=letter_button_colour, tags=("key_" + char, "letter"))
                self.create_text(x, y, text=char, font=("Inter", 18, "bold"), fill="white",tags=("letter", "label_" + char))
                self.boxes_coord["key_" + char]=(x-size/2,y-size*height/2,x+size/2,y+size*height/2)
 
 #last row has different shapes so the sizing has to be different
-        Last_row_of_keyboard = At_y_axis + 4 * (size * height + gap)
+        Last_row_of_keyboard = at_y_axis + 4 * (size * height + gap)
         Y_axis = 300-(size+gap)/2
         zonaxis=300+(size+gap)/2
-        Left_side_of_delete_button  = leftside
+        Left_side_of_delete_button  = left_side
         Right_side_of_delete_button = Y_axis- size/2 - gap
         Middle_of_delete_button= (Left_side_of_delete_button + Right_side_of_delete_button) / 2
 
 #the ends of the last line so that it fits inside the box shape of my plan of the keyboard shape
         Left_side_of_enter_button  = zonaxis+size/2+gap
-        Right_side_of_enter_button = rightside
+        Right_side_of_enter_button = right_side
         Middle_of_enter_button= (Left_side_of_enter_button + Right_side_of_enter_button) / 2
 
 #The last line of buttons on the keyboard has to be done seperately because they are not same shaped (its huering my head ;-;)
-        self.create_rectangle(Left_side_of_delete_button, Last_row_of_keyboard - size*height/2,Right_side_of_delete_button, Last_row_of_keyboard + size*height/2,width=0, fill=LetterButtonColour, tags=("back", "key_back"))
+        self.create_rectangle(Left_side_of_delete_button, Last_row_of_keyboard - size*height/2,Right_side_of_delete_button, Last_row_of_keyboard + size*height/2,width=0, fill=letter_button_colour, tags=("back", "key_back"))
         self.create_text(Middle_of_delete_button, Last_row_of_keyboard,text="DELETE", font=("Inter", 12, "bold"),fill="white", tags=("delete", "deletebutton","back"))
         self.boxes_coord["Delete key"] = (Left_side_of_delete_button, Last_row_of_keyboard -size*height/2,Right_side_of_delete_button, Last_row_of_keyboard + size*height/2)
-        self.create_rectangle(Y_axis - size / 2, Last_row_of_keyboard - size * height / 2,Y_axis + size / 2, Last_row_of_keyboard + size * height / 2,width=0, fill=LetterButtonColour, tags=("key_Y", "letter"))
+        self.create_rectangle(Y_axis - size / 2, Last_row_of_keyboard - size * height / 2,Y_axis + size / 2, Last_row_of_keyboard + size * height / 2,width=0, fill=letter_button_colour, tags=("key_Y", "letter"))
         self.create_text(Y_axis, Last_row_of_keyboard,text="Y", font=("Inter", 18, "bold"),fill="white", tags=("letter", "label Y BUtton"))
         self.boxes_coord["Y"] = (Y_axis - size / 2, Last_row_of_keyboard - size * height / 2, Y_axis + size / 2,Last_row_of_keyboard + size * height / 2)
-        self.create_rectangle(zonaxis - size / 2, Last_row_of_keyboard - size * height / 2, zonaxis + size / 2,Last_row_of_keyboard + size * height / 2, width=0, fill=LetterButtonColour,tags=("key_Z", "letter"))
+        self.create_rectangle(zonaxis - size / 2, Last_row_of_keyboard - size * height / 2, zonaxis + size / 2,Last_row_of_keyboard + size * height / 2, width=0, fill=letter_button_colour,tags=("key_Z", "letter"))
         self.create_text(zonaxis, Last_row_of_keyboard, text="Z", font=("Inter", 18, "bold"), fill="white",tags=("letter", "Z Button"))
         self.boxes_coord["Z"] = (zonaxis - size / 2,Last_row_of_keyboard - size * height / 2, zonaxis + size / 2,Last_row_of_keyboard + size * height / 2)
-        self.create_rectangle(Left_side_of_enter_button, Last_row_of_keyboard - size * height / 2, Right_side_of_enter_button,Last_row_of_keyboard + size * height / 2, width=0, fill=LetterButtonColour,tags=("enter", "enter button"))
+        self.create_rectangle(Left_side_of_enter_button, Last_row_of_keyboard - size * height / 2, Right_side_of_enter_button,Last_row_of_keyboard + size * height / 2, width=0, fill=letter_button_colour,tags=("enter", "enter button"))
         self.create_text(Middle_of_enter_button, Last_row_of_keyboard, text="ENTER", font=("Inter", 12, "bold"),fill="white", tags=("enter", "enterbutton"))
         self.boxes_coord["Enter key"] = (Left_side_of_enter_button, Last_row_of_keyboard - size * height / 2,Right_side_of_enter_button, Last_row_of_keyboard + size * height / 2)
 
@@ -189,11 +189,11 @@ class StellaVerbaGamePage(Frame):
         self.entered = 0
         self.frozen = False
         self.checking= False
-        self.alreadywordused = []
+        self.word_already_used = []
         self.popup =Label(self,text="",font=("Inter",15,"bold"), bg="#91000c",fg="#E8E8E8")
 
 
-        self.keyboard=Physical_DigitalKeyboard(self,self.Background_Image)
+        self.keyboard=physical_and_digital_keyboard(self,self.Background_Image)
         self.Go_back_to_home_page_button.lift()
         cell=68
         gap=6
@@ -209,22 +209,22 @@ class StellaVerbaGamePage(Frame):
         Single_Line_Functions_y_axis = 115
         Single_Line_functions_x_axis = Centre_of_keyboard - Answer_box_width // 2
         #The line that seperates from the keyboard and the single line funciton
-        self.middleline_inwordlepage = Canvas(self, bg="#555555", highlightthickness=0, height=2, width=560)
-        self.middleline_inwordlepage.place(x=20, y=Single_Line_Functions_y_axis + cell + 15)
+        self.Seperation_line_of_keyboard_and_answer_box = Canvas(self, bg="#555555", highlightthickness=0, height=2, width=560)
+        self.Seperation_line_of_keyboard_and_answer_box.place(x=20, y=Single_Line_Functions_y_axis + cell + 15)
 
         self.Single_line_of_boxes = Canvas(self, bg="#3D3D3D", width=Answer_box_width, height=cell, highlightthickness=0)
         self.Single_line_of_boxes.place(x=Single_Line_functions_x_axis, y=Single_Line_Functions_y_axis)
         for i in range(self.Word_length):
             xx = i * (cell + gap)
             self.Single_line_of_boxes.create_rectangle(xx, 0, xx + cell, cell, outline="#6E6E6E", width=2,tags=(f"hint{i}",))
-            self.Single_line_of_boxes.create_text(xx + cell // 2, cell // 2, text="", font=("Inter", 30, "bold"), fill="white",tags=(f"givehintletter{i}",))
+            self.Single_line_of_boxes.create_text(xx + cell // 2, cell // 2, text="", font=("Inter", 30, "bold"), fill="white",tags=(f"give_hint_letter{i}",))
 
 
         #hint button image and stuffs
         self.Hint_button_image = PhotoImage(file=str(self.img / "lightbulb.png"))
         self.Hint_button = Label(self, image=self.Hint_button_image, bd=0, cursor="hand2")
         self.Hint_button.place(x=Single_Line_functions_x_axis - 80, y=Single_Line_Functions_y_axis, width=cell, height=cell)
-        self.Hint_button.bind("<ButtonRelease-1>", self.givehint)
+        self.Hint_button.bind("<ButtonRelease-1>", self.give_hint)
 
 #the help and documentation page button and the image that appears wehn it is pressed
         self.Help_button = tk.Button(self, text="?", font=("Inter", 20, "bold"), cursor="hand2",bd=0, relief="flat", bg="#545454", fg="white",activebackground="#6a6a6a", activeforeground="white",command=self.Show_help_page)
@@ -254,19 +254,19 @@ class StellaVerbaGamePage(Frame):
         self.Gray=Grey # the colours that I previously created (above)
         self.Green=Green
         self.Yellow=Yellow
-        self.bind_all("<Key-BackSpace>", self.Delete_the_letter)
-        self.bind_all("<Key-Return>", self.Submit_the_answer)
+        self.bind_all("<Key-BackSpace>", self.delete_the_letter)
+        self.bind_all("<Key-Return>", self.submit_the_answer)
         self.bind_all("<Key>", self.allow_letter_type)
 
 
 #Function that allows the letter to be deleted from the answering box thing
-    def Delete_the_letter(self,event=None):
+    def delete_the_letter(self,event=None):
         if self.frozen or self.checking or len(self.textField)==0:
             return
         self.textField=self.textField[:-1]
         self.canvas.itemconfigure(f"text{len(self.textField)}{self.entered}",text="")
 #the code that determines of the user is entering a proper answer
-    def Submit_the_answer(self,event=None):
+    def submit_the_answer(self,event=None):
         if self.frozen or self.checking:
             return
         if len(self.textField) <self.Word_length:
@@ -293,7 +293,7 @@ class StellaVerbaGamePage(Frame):
 #the code checks the ansewr the user enters before confirming anything
     def Checking_before_scoring_the_guess(self):
         #fix this
-        valid = checkifrealword(self.textField)
+        valid = check_if_real_word(self.textField)
         self.after(0,lambda: self.After_the_checking(valid))
 #after it has checked the thign it would determine if it does not meet the criteria to be considered as a proper guess then one of the errosrs would pop up
     def After_the_checking(self, valid):
@@ -301,10 +301,10 @@ class StellaVerbaGamePage(Frame):
         if not valid:
             self.Show_error_pop_up("Word doesn't exist")
             return
-        if self.textField in self.alreadywordused:
+        if self.textField in self.word_already_used:
             self.Show_error_pop_up("Word has already been used")
             return
-        self.alreadywordused.append(self.textField)
+        self.word_already_used.append(self.textField)
         self.Scoring_the_guess()
 
 
@@ -318,22 +318,22 @@ class StellaVerbaGamePage(Frame):
         guess =self.textField
         secret= self.word
         colored = [self.Gray]*self.Word_length
-        letterCount ={}
+        letter_count ={}
         for char in secret:
-            if char in letterCount:
-                letterCount[char]+=1
+            if char in letter_count:
+                letter_count[char]+=1
             else:
-                letterCount[char]=1
+                letter_count[char]=1
         for i in range(self.Word_length):
             if guess[i]== secret[i]:
                 colored[i] =self.Green
-                letterCount[guess[i]]-=1
+                letter_count[guess[i]]-=1
         for i in range(self.Word_length):
             if colored[i] ==self.Green:
                 continue
-            if guess[i] in letterCount and letterCount[guess[i]]>0:
+            if guess[i] in letter_count and letter_count[guess[i]]>0:
                 colored[i]=self.Yellow
-                letterCount[guess[i]]-=1
+                letter_count[guess[i]]-=1
 
 
 
@@ -342,7 +342,7 @@ class StellaVerbaGamePage(Frame):
             self.canvas.itemconfigure(f"cell{i}{self.entered}",fill=colored[i],outline=colored[i])
             self.canvas.itemconfigure(f"text{i}{self.entered}",fill="white")
             if colored[i] == self.Green:
-                self.Single_line_of_boxes.itemconfigure(f"givehintletter{i}", text=self.word[i])
+                self.Single_line_of_boxes.itemconfigure(f"give_hint_letter{i}", text=self.word[i])
                 self.Single_line_of_boxes.itemconfigure(f"hint{i}", fill=self.Green, outline=self.Green)
             cur = self.keyboard.itemcget("key_"+guess[i],"fill")
             if cur == self.Green:
@@ -354,7 +354,7 @@ class StellaVerbaGamePage(Frame):
             elif colored[i]== self.Gray and cur =="#545454":
                 self.keyboard.itemconfigure("key_"+guess[i], fill=self.Gray)
             if colored[i] == self.Green:
-                self.Single_line_of_boxes.itemconfigure(f"givehintletter{i}", text=guess[i])
+                self.Single_line_of_boxes.itemconfigure(f"give_hint_letter{i}", text=guess[i])
                 self.Single_line_of_boxes.itemconfigure(f"hint{i}", fill=self.Green, outline=self.Green)
         won = colored.count(self.Green) ==self.Word_length
         self.entered+= 1
@@ -363,20 +363,20 @@ class StellaVerbaGamePage(Frame):
             self.frozen =True
             self.Going_to_the_result_page(won)
 #the hint button that gives hint by telling the user what lettter appears in what locaiton in the Single_line_of_boxes function
-    def givehint(self, event=None):
+    def give_hint(self, event=None):
         for i in range(self.Word_length):
-            current = self.Single_line_of_boxes.itemcget(f"givehintletter{i}", "text")
+            current = self.Single_line_of_boxes.itemcget(f"give_hint_letter{i}", "text")
             if current == "":
-                self.Single_line_of_boxes.itemconfigure(f"givehintletter{i}", text=self.word[i])
+                self.Single_line_of_boxes.itemconfigure(f"give_hint_letter{i}", text=self.word[i])
                 self.Single_line_of_boxes.itemconfigure(f"hint{i}", fill=self.Green, outline=self.Green)
                 self.Single_line_of_boxes.itemconfigure(f"hint{i}", tags=("temporaryhint", f"hint{i}"))
                 self.after(2000, lambda i=i: self.Clear_hint(i))
                 return
 #this is more of a personal choice where the hint goes away after a bit, so that the hint is like a mini clue they can get but then it fades so they still "get" feeling of doing it idk
     def Clear_hint(self, i):
-        current = self.Single_line_of_boxes.itemcget(f"givehintletter{i}", "text")
+        current = self.Single_line_of_boxes.itemcget(f"give_hint_letter{i}", "text")
         if current == self.word[i]:
-            self.Single_line_of_boxes.itemconfigure(f"givehintletter{i}", text="")
+            self.Single_line_of_boxes.itemconfigure(f"give_hint_letter{i}", text="")
             self.Single_line_of_boxes.itemconfigure(f"hint{i}", fill="#3D3D3D", outline="#6E6E6E")
             #function that allows the help page to open and be shown
     def Show_help_page(self):
@@ -392,7 +392,7 @@ class StellaVerbaGamePage(Frame):
         self.unbind_all("<Key-BackSpace>")
         self.unbind_all("<Key-Return>")
         self.unbind_all("<Key>")
-        self.after(1000, lambda:self.app.showresultpage(won=won,word=self.word,guesses=self.entered))
+        self.after(1000, lambda:self.app.Show_result_page(won=won,word=self.word,guesses=self.entered))
 
 
 
@@ -433,19 +433,23 @@ class StellaVerbaResultPage(Frame):
         if won:
             self.Amount_of_guesses_showed = tk.Label(self.Result_page_box, text=f"You got it in {guesses} guess{'es' if guesses != 1 else ''}!", font=("Inter", 14), bg="#2E2E2E", fg="#AAAAAA")
             self.Amount_of_guesses_showed.pack(pady=(0, 20))
+        #this is more of a testing type of code to make sure that each of the word has definition
         definition = Definitions.get(word.lower(), "No definition available.")
         self.Definition_of_the_word = tk.Frame(self.Result_page_box, bg="#545454", bd=0)
         self.Definition_of_the_word.pack(padx=30, pady=(0, 30), fill="x")
+        #the font of the definition inside the box
         self.Font_of_the_definition = tk.Label(self.Definition_of_the_word, text=definition, font=("Inter", 9),bg="#545454", fg="white", wraplength=480, justify="center")
         self.Font_of_the_definition.pack(padx=20, pady=20)
+        #the frame of the play again and the exit button
         self.Play_Again_And_Exit_Button = tk.Frame(self.Result_page_box, bg="#2E2E2E")
         self.Play_Again_And_Exit_Button.pack(pady=(0, 40))
+        #The play again button for the result page
         self.Play_Again_Button = tk.Button(self.Play_Again_And_Exit_Button, text="Play Again", font=("Inter", 16, "bold"), bg="#548a38", fg="white", bd=0, relief="flat", cursor="hand2", activebackground="#5d993d", activeforeground="white", command=self.Play_Again)
         self.Play_Again_Button.pack(side="left", padx=20, ipadx=20, ipady=10)
         #the exit button for the result page
         self.Exit_button = tk.Button(self.Play_Again_And_Exit_Button, text="Exit", font=("Inter", 16, "bold"),bg="#ab1b27", fg="white", bd=0, relief="flat", cursor="hand2",activebackground="#bf1d2a", activeforeground="white",command=self.master.winfo_toplevel().destroy)
         self.Exit_button.pack(side="left", padx=20, ipadx=20, ipady=10)
-
+    #the play again function where it would destroy the page and would lead back to the game page
     def Play_Again(self):
         self.destroy()
-        self.app.displayingtheresults(won=None, word=None, guesses=None)
+        self.app.Displaying_the_results_page(won=None, word=None, guesses=None)

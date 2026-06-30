@@ -126,15 +126,15 @@ class Verba:
         self.frameofgamepage.pack(fill="both",expand=True)
         StellaVerbaGamePage(self.frameofgamepage,difficulty,self)
     #code that displays the result page itself
-    def displayingtheresults(self,won,word,guesses):
+    def Displaying_the_results_page(self,won,word,guesses):
         if hasattr(self,"resultframe") and self.resultframe.winfo_exists():
             self.resultframe.destroy()
         if hasattr(self,"frameofgamepage") and self.frameofgamepage.winfo_exists():
             self.frameofgamepage.destroy()
         self.Difficulty.pack(fill="both",expand=True)
 
-    #code that displays the pop up of the result page
-    def showresultpage(self, won, word, guesses):
+    #code that displays the popup of the result page
+    def Show_result_page(self, won, word, guesses):
         if hasattr(self, "frameofgamepage") and self.frameofgamepage.winfo_exists():
             self.frameofgamepage.destroy()
         self.resultframe = tk.Frame(self.root, bg="white")
