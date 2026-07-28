@@ -68,13 +68,13 @@ class Verba:
 
         #Code for the sun and moon buttons which is the buttons for the light and dark mode
         #releif makes it so that there is no more button brick effect and cursor 2 makes the cursor point when it hovers over the button
-        self.lightbutton = tk.Button(self.Home, image=self.sun,command=lambda: self.load_button("light_mode"), bd=0, highlightthickness=0, relief="flat", cursor="hand2",bg=data["bgc"],activebackground=data["bgc"])
-        self.lightbutton.place(relx=0.25, rely=0.05)
+        self.light_button = tk.Button(self.Home, image=self.sun,command=lambda: self.load_button("light_mode"), bd=0, highlightthickness=0, relief="flat", cursor="hand2",bg=data["bgc"],activebackground=data["bgc"])
+        self.light_button.place(relx=0.25, rely=0.05)
         #code so that there is an image that would be played for a hover effect before the user click on the button to make it more aesthetic
 
 
-        self.darkbutton = tk.Button(self.Home, image=self.moon,command=lambda: self.load_button("dark_mode"),bd=0, highlightthickness=0, relief="flat", cursor="hand2",bg=data["bgc"],activebackground=data["bgc"])
-        self.darkbutton.place(relx=0.69, rely=0.07)
+        self.dark_button = tk.Button(self.Home, image=self.moon,command=lambda: self.load_button("dark_mode"),bd=0, highlightthickness=0, relief="flat", cursor="hand2",bg=data["bgc"],activebackground=data["bgc"])
+        self.dark_button.place(relx=0.69, rely=0.07)
 
         #Design for Difficulty Selection Page
         self.difficulty_background = tk.Label(self.Difficulty, image=self.Home_background, bd=0)
@@ -161,8 +161,8 @@ class Verba:
         self.difficulty_selection_page_title.config(bg=data["bgc"], fg=data["bgt"])
         #The buttons for the home page eg: the sun the star and the moon
         self.star_button.config(image=self.star,bg=data["bgc"])
-        self.lightbutton.config(image=self.sun,bg=data["bgc"],activebackground=data["bgc"])
-        self.darkbutton.config(image=self.moon,bg=data["bgc"],activebackground=data["bgc"])
+        self.light_button.config(image=self.sun,bg=data["bgc"],activebackground=data["bgc"])
+        self.dark_button.config(image=self.moon,bg=data["bgc"],activebackground=data["bgc"])
 
     def Go_back(self):
         self.Difficulty.pack_forget()
