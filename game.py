@@ -17,54 +17,55 @@ Words_for_the_game = {"easy":["idea","view","fact","goal","role","plan","term","
 
 #the definitions of the words
 Definitions = {
-    "idea": "A thought or suggestion - That's a great idea, let's go to the beach\nUnderstanding or knowledge - I have no idea what you mean\nPurpose or aim - The idea of the game is to get the highest score\nBelief or opinion - They have unusual ideas about politics",
-    "view": "What can be seen from a certain location - The apartment has a beautiful view of the ocean\nOpinion or belief - In my view, going left is the best solution\nTo look or watch - Millions of people watched the broadcast\nTo consider or regard - They viewed the delay as a minor inconvenience",
-    "fact": "A thing that is true - It's a fact that the sun rises in the east\nSomething you can check or prove - The article was full of facts and figures",
-    "goal": "Something you're trying to achieve - My goal is to finish this project by Friday\nA point scored in a sport - She scored the winning goal in the last minute",
-    "role": "The job someone does in a group - Everyone has a role to play in the team\nA character in a movie or play - He got the lead role in the school play",
-    "plan": "An idea for how to do something - We came up with a plan for the weekend\nWhat you intend to do in future - My plan is to study engineering next year\nTo work out details ahead of time - We need to plan the trip before we leave",
-    "term": "A word with a specific meaning - Photosynthesis is a science term\nA block of time at school - The next term starts in two weeks",
-    "item": "A single thing - Can you grab that item off the shelf for me\nA point on a list - The first item on the agenda is the budget",
-    "base": "The bottom part of something - The lamp has a heavy metal base\nA main place to work or live from - The team set up their base near the river\nTo build something on top of - The movie is based on a true story",
-    "gain": "To get something - She gained a lot of confidence from the trip\nTo increase - Prices have gained over the past month\nAn increase or benefit - There was a small gain in his test scores",
-    "loss": "Losing something - The loss of his phone really stressed him out\nMoney lost in business - The company reported a loss this year",
-    "rule": "Something you have to follow - One rule is no phones in class\nA general pattern - As a rule, the shops close early on Sundays\nTo be in charge of something - The king ruled the country for forty years",
-    "mean": "What something means - What does this symbol mean\nTo intend something - I didn't mean to be rude\nUnkind - It's mean to leave someone out on purpose",
-    "rank": "A position in an order - She came first in the rankings\nTo put things in order - The app ranks songs by how often you play them",
-    "feel": "An emotion - I feel really tired today\nTo touch something - Feel how soft this jumper is\nTo think or believe - I feel like we should leave early",
-    "theme": "The main idea of something - The theme of the book is friendship\nA topic for an event - The party had a beach theme",
-    "issue": "A problem - There's an issue with the wifi again\nAn edition of a magazine - I bought the latest issue of the magazine",
-    "valid": "Makes sense, reasonable - That's a valid point\nStill allowed or usable - My bus pass is valid until next month",
-    "logic": "A way of thinking something through - Using basic logic, that can't be true\nThe reasoning behind something - There's a logic to how the files are organised",
-    "claim": "To say something is true - He claimed he'd never seen it before\nTo ask for something you're owed - She made a claim on her insurance\nA statement that might be true or false - The ad makes some big claims",
-    "value": "How important something is - Education has a lot of value\nThe price or worth of something - The value of the car dropped quickly\nTo care about something - I really value honesty",
-    "adapt": "To change to fit a new situation - We had to adapt to the new schedule\nTo turn something into a different form - The book was adapted into a film",
-    "focus": "The main thing you're paying attention to - The focus of the lesson is fractions\nTo concentrate on something - Try to focus on one task at a time",
-    "trend": "The direction things are heading - There's a trend towards working from home\nSomething popular right now - Big sneakers are a trend at the moment",
-    "civil": "Polite, even when disagreeing - They kept the conversation civil\nTo do with citizens or society - She studied civil rights at uni",
-    "shift": "To move - He shifted his chair closer to the desk\nA change - There's been a shift in how people shop\nA work period - She works the night shift on weekends",
-    "cause": "The reason something happens - The cause of the delay was traffic\nTo make something happen - The storm caused a power cut",
-    "proof": "Evidence - Do you have proof that you paid for it\nA draft checked before printing - She read through the proof before sending it off",
-    "image": "A picture - The image took ages to load\nHow people see someone - He's trying to fix his public image",
-    "grant": "Money given for a purpose - She got a grant to fund her research\nTo allow something - The teacher granted us an extra day for the assignment",
-    "impact": "A strong effect - The new policy had a big impact on prices\nThe force of a collision - The impact damaged the front of the car",
-    "theory": "An idea that explains something - Scientists came up with a new theory\nA set of ideas about a subject - We learned some music theory in class",
-    "review": "A look back to check something - The teacher did a review before the test\nAn opinion on something - He left a five-star review for the restaurant\nTo check something again - Can you review my essay before I submit it",
-    "debate": "A discussion with different opinions - The class had a debate about homework\nAn ongoing disagreement - There's a lot of debate about the new rule\nTo argue different sides - They debated which movie to watch",
-    "select": "To choose - Select your answer from the dropdown\nCarefully chosen - Only a select few were invited",
-    "create": "To make something new - She created a poster for the event\nTo cause something to happen - The changes created a few problems",
-    "survey": "A set of questions to collect info - We did a survey to find out what people think\nA general look at something - The report gave a survey of last year's results\nTo look over something - The drone surveyed the area from above",
-    "assess": "To judge how good or bad something is - The teacher will assess our projects\nTo work out the value of something - They assessed the damage after the storm",
-    "expand": "To become bigger - The company expanded into new countries\nTo add more detail - Could you expand on that idea a bit more",
-    "symbol": "Something that represents something else - A heart is a symbol of love\nA character used in writing or maths - The percent sign is a symbol",
-    "motive": "The reason behind doing something - His motive for helping was kindness\nWhat's driving someone's actions - Police are trying to find a motive",
-    "policy": "A set of rules a group follows - The school has a no-phone policy\nAn official plan of action - The government announced a new policy",
-    "crisis": "A serious problem - The country is going through an economic crisis\nA turning point - The story builds up to a crisis moment",
-    "effort": "Trying hard - She put a lot of effort into the project\nThe energy something takes - Climbing the hill took a lot of effort",
-    "enable": "To make something possible - The new app enables faster messaging\nTo give someone the means to do something - The donation enabled her to study overseas",
-    "factor": "Something that affects a result - Weather was a big factor in the delay\nA number that divides evenly into another - 5 is a factor of 20",
-    "status": "Someone's position or situation - He has a high status at work\nThe current state of something - What's the status of the order",
-    "inform": "To tell someone something - Please inform us if your plans change\nTo shape understanding - The data informed their decision", }
+        "idea": "Thought/suggestion - That's a great idea, lets go to the beach\nA purpose/goal - The idea is to win by having the most points",
+        "view": "Something you can see - The mountain view is amazing\nAn opinion - That's my view on ice cream flavours",
+        "fact": "Something that is true -Humans die and that's a fact\nInformation that can be proven - Check the facts, smoking causes lung cancer",
+        "goal": "Something you want to achieve - My goal is to pass the internal with excellence\nA point scored in sport - She scored a goal by herself",
+        "role": "A person's job or purpose - Everyone has a role in this world\nA character in a play or film - He played the lead role as the prince",
+        "plan": "An idea for what to do - We made a plan on how to reach antarctica\nTo organise ahead - Let's plan the trip to the Bahamas",
+        "term": "A word with a special meaning - Aqueous is a chemistry term\nA school period - Next term is going to start in 3 days.",
+        "item": "A single object - Pick up that ball behind the fence \nOne thing on a list - First item to buy is butter",
+        "base": "The bottom of something - The base of the house is strong\nA main place - Our base is near the beach",
+        "gain": "To get something - She gained confidence to speak to the crowd\nAn increase - A small gain in knowledge",
+        "loss": ":Lost something - The loss of her puppy was upsetting\nMoney lost - The business made a loss of 20 million dollars",
+        "rule": "Something you must follow - Follow the rules in the kitchen\nTo control - The queen ruled the country for 30 years",
+        "mean": "To have a meaning - What does this book mean?\nUnkind - Don't be mean to your sister",
+        "rank": "A position in order - First rank in swimming",
+        "feel": "To have an emotion - I feel happy because I got a new book \nTo touch - Feel the fabric of the dress I am wearing",
+        "theme": "The main idea - The theme of this book is about how friendship prevails all\nA style or topic - The movie we are watching is a pirate themed one",
+        "issue": "A problem - There's an issue, the pipes are broken\n Publish or release: We need to issue you a new debit card",
+        "valid": "Reasonable or correct - Breaking your hand is a valid reason to not sit the exam\nStill usable - The gift card is valid until the december of next year",
+        "logic": "Clear reasoning - Use logic to solve this mathematics equation\nA sensible way of thinking - Good logic on bringing scarfs in this weather",
+        "claim": "To say something is true - He claimed that he can run the fastest\nA statement - That's a big claim to say everyone except you sucks",
+        "value": "How important something is - I value love over money \nHow much something is worth - The value of gold has increased exponentially",
+        "adapt": "To change for a new situation - Adapt quickly to this weather\nTo change into another form - The book was adapted into a movie",
+        "focus": "Main attention - Stay focused on your task\nTo concentrate - Our main focus is to write this book",
+        "trend": "A common change - A growing trend has been seen of children’s reading capability increasing \nSomething popular - Jeans are the latest trend",
+        "civil": "Polite - Can we keep it civil and not argue\nRelated to society - It is a civil right to vote whether your a man or a woman",
+        "shift": "To move -  could you shift your chair a little more to the right\nA change - A big shift in the pH scale",
+        "cause": "The reason - The cause of our books being wet was the rain\nTo make happen - The heavy rain caused there to be a flood in the neighbourhood",
+        "proof": "Evidence - Show me proof that you didn’t cheat",
+         "image": "A picture - Nice image of the ocean\nHow others see you - You have to maintain your public image as a model",
+        "grant": "Money given to help - A research grant was given to the high school student\nTo allow - Permission granted to enter the laboratory",
+        "impact": "A strong effect - The war had a big impact in the economy\nA collision - The impact of the car crash was loud",
+        "theory": "An explanation - A scientific theory\nA set of ideas - Music theory",
+        "review": "To check again - Review your work to make sure there is no grammar issues\nAn opinion - my review on the movie is that it was horrible",
+        "debate": "A discussion with different opinions - The group debated on how to win the game\nTo argue different sides - They debated on who deserves the inheritance",
+        "select": "To choose - Select an prize out of these three options\nChosen carefully - A select group to go with you",
+        "create": "To make something - He created a poster for the parade\nTo cause - The change in school system created problems",
+        "survey": "A set of questions - please complete the survey so that we may know your opinion\nTo look over - Could you survey the area to make sure it’s safe",
+        "assess": "To judge - The teacher next door is going to assess our work\nTo work out value - He is going to the damage done to their house",
+        "expand": "To grow bigger - Expand the business to worldwide\nTo add more detail - Could you expand your answer a bit more",
+        "symbol": "Something that represents something - The heart is a symbol for their undying love\nA special character - The % is a symbol for percentages",
+        "motive": "A reason for doing something - His motive is to win the game\nWhat drives actions - Find the motive that caused the character to go mad",
+        "policy": "A set of rules - it is school policy to wear black socks",
+          "crisis": "A serious problem - After the trip we were in a financial crisis",
+        "effort": "Trying hard - Great effort was placed into creating the project\nThe energy needed - It takes effort to pass this exam",
+        "enable": "To make possible - Enable notifications so that you will be notified\nTo help someone do something - The donation enabled them to get into university",
+        "factor": "Something that affects a result - A key factor in ocean acidification is carbon dioxide\nA number that divides another - 5 is a factor of 20",
+        "status": "Current situation - Her status is currently in critical condition \nA person's position - Aristocrats had high status compared to the farmers",
+        "inform": "To tell someone - Inform your teacher that you got to leave the class\nTo help someone decide - The facts informed us that we should look both ways before crossing the road", }
+
 
 # how many letters and guesses per difficulty
 Word_length_for_each_difficulty = {"easy": 4, "medium": 5, "hard": 6} # the word lengths for each of the difficulty
@@ -170,7 +171,7 @@ class StellaVerbaGamePage(Frame):
         self.background_images = PhotoImage(file=str(self.img / ("dbg1.png" if app.mode == "dark_mode" else "lbg1.png")))
         self.bg_label = Label(self, image=self.background_images, bd=0)
         self.bg_label.place(x=0, y=0, relwidth=1, relheight=1)
-
+        #the go back function that appears in the top left corner of the game page
         self.Go_back_to_home_page_button = tk.Button(self, text="<-- Back", font=("Inter", 14, "bold"), command=self.app.go_back_to_difficulty_page,bg="#545454", fg="white", bd=0, cursor="hand2")
         self.Go_back_to_home_page_button.place(x=20, y=20)
         self.Go_back_to_home_page_button.lift()
@@ -335,9 +336,6 @@ class StellaVerbaGamePage(Frame):
                 colored[i]=self.Yellow
                 letter_count[guess[i]]-=1
 
-
-
-
         for i in range(self.Word_length):
             self.canvas.itemconfigure(f"cell{i}{self.entered}",fill=colored[i],outline=colored[i])
             self.canvas.itemconfigure(f"text{i}{self.entered}",fill="white")
@@ -435,7 +433,7 @@ class StellaVerbaResultPage(Frame):
             self.Amount_of_guesses_showed = tk.Label(self.Result_page_box, text=f"You got it in {guesses} guess{'es' if guesses != 1 else ''}!", font=("Inter", 14), bg="#2E2E2E", fg="#AAAAAA")
             self.Amount_of_guesses_showed.pack(pady=(0, 20))
         #this is more of a testing type of code to make sure that each of the word has definition
-        definition = Definitions.get(word.lower(), "No definition available.")
+        definition = Definitions.get(word.lower(), "No definition available.") #just to test if there is no definitons for the word
         self.Definition_of_the_word = tk.Frame(self.Result_page_box, bg="#545454", bd=0)
         self.Definition_of_the_word.pack(padx=30, pady=(0, 30), fill="x")
         #the font of the definition inside the box
