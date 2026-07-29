@@ -83,28 +83,38 @@ class Verba:
         self.difficulty_selection_page_title.pack()
 
         #button for the hard mode difficulty in the difficulty page
+        #button for the hard mode
         self.Hard_button = tk.Button(self.Difficulty, text="Hard", width = 25,command=lambda:self.difficulty_page_to_game_page("hard"),bg="#C7141F", font=("Inter",20,"bold"))
         self.Hard_button.place(relx=0.2,rely=0.6,relwidth=0.1,relheight=0.1)
         #Code for the info of each difficulty
+        #difficulty description box for the hard mode
         self.Hard_Mode_Word_description = tk.Label(self.Difficulty,font=("Inter",12,"bold"),justify="left",bg=data["description_box_bg"],fg=data["description_box_font"],text = "6 letter combination with more objectively harder terms\nHardest difficulty out of the three modes")
         self.Hard_Mode_Word_description.place(relx=0.35, rely=0.6, relwidth=0.4, relheight=0.1)
         #added overlay effect on the button when the user hovers over the button
+        #overlap effect when hovering over the hard button
         self.Hard_button.bind("<Enter>", lambda e: self.Hard_button.config(bg="#D81212"))
         self.Hard_button.bind("<Leave>", lambda e: self.Hard_button.config(bg="#C7141F"))
         #code for the medium button
+        # button for the medium mode
         self.Medium_button = tk.Button(self.Difficulty, text="Medium", width = 25,command=lambda:self.difficulty_page_to_game_page("medium"),bg="#C27E01", font=("Inter",20,"bold"))
+        # difficulty description box for the medium mode
         self.Medium_button.place(relx=0.2, rely=0.4, relwidth=0.1, relheight=0.1)
         self.Medium_Mode_Word_description = tk.Label(self.Difficulty, font=("Inter", 12, "bold"), justify="left", bg=data["description_box_bg"],fg=data["description_box_font"],text = "5 letter combination with more objectively moderate terms\nMedium difficulty out of the three modes")
         self.Medium_Mode_Word_description.place(relx=0.35, rely=0.4, relwidth=0.4, relheight=0.1)
+        #overlap effect when hovering over the medium button
         self.Medium_button.bind("<Enter>", lambda e: self.Medium_button.config(bg="#D98F06"))
         self.Medium_button.bind("<Leave>", lambda e: self.Medium_button.config(bg="#C27E01"))
         #code for the easy button
+        # button for the easy mode
         self.Easy_button = tk.Button(self.Difficulty, text="Easy", width = 25,command=lambda:self.difficulty_page_to_game_page("easy"),bg="#558B36", font=("Inter",20,"bold"))
+        # difficulty description box for the easy mode
         self.Easy_Mode_Word_description = tk.Label(self.Difficulty, font=("Inter", 12, "bold"), justify="left", bg=data["description_box_bg"],fg=data["description_box_font"],text = "4 letter combination with more objectively simpler terms\nEasiest difficulty out of the three modes")
         self.Easy_Mode_Word_description.place(relx=0.35, rely=0.2, relwidth=0.4, relheight=0.1)
         self.Easy_button.place(relx=0.2, rely=0.2, relwidth=0.1, relheight=0.1)
+        #overlap effect when hovering over the easy button
         self.Easy_button.bind("<Enter>", lambda e: self.Easy_button.config(bg="#68AF3E"))
         self.Easy_button.bind("<Leave>", lambda e: self.Easy_button.config(bg="#558B36"))
+        #the code for the go back button to appear in the game page
         self.Go_back_to_home_page=tk.Button(self.Difficulty,text="<-- Back", font = ("Inter", 14,"bold"), command = self.Go_back, bg = "#84817f", fg = "white", bd = 0, cursor = "hand2")
         self.Go_back_to_home_page.place(x=20, y=20)
         self.Home.pack(fill="both", expand=True)
@@ -163,11 +173,11 @@ class Verba:
         self.star_button.config(image=self.star,bg=data["bgc"])
         self.light_button.config(image=self.sun,bg=data["bgc"],activebackground=data["bgc"])
         self.dark_button.config(image=self.moon,bg=data["bgc"],activebackground=data["bgc"])
-
+#the go back button that would be in the game page so that pressing it would lead to the home page
     def Go_back(self):
         self.Difficulty.pack_forget()
         self.Home.pack(fill="both", expand=True)
-
+#the go back button for the game page where pressing it would bring a pop up and lead back to the difficulty page
     def go_back_to_difficulty_page(self):
         go_back_pop_up = tk.Toplevel(self.root)
         go_back_pop_up.geometry("400x250")

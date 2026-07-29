@@ -308,7 +308,7 @@ class StellaVerbaGamePage(Frame):
         self.word_already_used.append(self.textField)
         self.scoring_the_guess()
 
-
+#shoes the error pop up and after 1.5 seconds it would remove it
     def show_error_pop_up(self, message):
         self.popup.config(text=message)
         self.popup.lift()
@@ -370,7 +370,7 @@ class StellaVerbaGamePage(Frame):
                 self.Single_line_of_boxes.itemconfigure(f"hint{i}", tags=("temporary_hint", f"hint{i}"))
                 self.after(2000, lambda i=i: self.clear_hint(i))
                 return
-#this is more of a personal choice where the hint goes away after a bit, so that the hint is like a mini clue they can get, but then it fades so they still "get" feeling of doing it
+#this is more of a personal choice where the hint goes away after a bit, so that the hint is like a mini clue they can get(because it seemed to easy), but then it fades so they still "get" feeling of doing it
     def clear_hint(self, i):
         current = self.Single_line_of_boxes.itemcget(f"give_hint_letter{i}", "text")
         if current == self.word[i]:
@@ -386,7 +386,7 @@ class StellaVerbaGamePage(Frame):
     def close_help_page(self, event=None): #the function that closes both the belp page and the help page button
         self.Help_image_box.place_forget()
         self.Help_image_close.place_forget()
-
+#function unbinds all the keys that is in the game page and then if the loser wins/fails it takes a second and then lead the user to the result page
     def going_to_the_result_page(self, won):
         self.unbind_all("<Key-BackSpace>")
         self.unbind_all("<Key-Return>")
